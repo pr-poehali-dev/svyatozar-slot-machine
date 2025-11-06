@@ -23,18 +23,18 @@ const Index = () => {
   const faceUrl = 'https://cdn.poehali.dev/files/531d6c39-e90b-4aa4-b66e-12b444f697fd.jpg';
 
   const games = [
-    { id: 'slot', title: 'Gates of Olympus', provider: 'Pragmatic Play', bgGradient: 'bg-gradient-to-br from-blue-600 to-purple-700', icon: '⚡' },
-    { id: 'starlight', title: 'Starlight Princess', provider: 'Pragmatic Play', bgGradient: 'bg-gradient-to-br from-pink-500 to-purple-600', icon: '✨' },
-    { id: 'sweet', title: 'Sweet Bonanza', provider: 'Pragmatic Play', bgGradient: 'bg-gradient-to-br from-pink-400 to-red-500', icon: '🍭' },
-    { id: 'wolf', title: 'Wolf Gold', provider: 'Pragmatic Play', bgGradient: 'bg-gradient-to-br from-orange-600 to-yellow-500', icon: '🐺' },
-    { id: 'book', title: 'Book of Dead', provider: 'Play\'n GO', bgGradient: 'bg-gradient-to-br from-yellow-700 to-orange-800', icon: '📖' },
-    { id: 'razor', title: 'Razor Shark', provider: 'Push Gaming', bgGradient: 'bg-gradient-to-br from-blue-700 to-cyan-500', icon: '🦈' },
-    { id: 'wanted', title: 'Wanted Dead', provider: 'Hacksaw Gaming', bgGradient: 'bg-gradient-to-br from-red-800 to-orange-700', icon: '💀' },
-    { id: 'olympus', title: 'Rise of Olympus', provider: 'Play\'n GO', bgGradient: 'bg-gradient-to-br from-indigo-600 to-blue-700', icon: '⚔️' },
-    { id: 'gorilla', title: 'Gorilla Kingdom', provider: 'NetEnt', bgGradient: 'bg-gradient-to-br from-green-700 to-emerald-600', icon: '🦍' },
-    { id: 'fire', title: 'Fire Joker', provider: 'Play\'n GO', bgGradient: 'bg-gradient-to-br from-red-600 to-orange-500', icon: '🔥' },
-    { id: 'mega', title: 'Mega Moolah', provider: 'Microgaming', bgGradient: 'bg-gradient-to-br from-yellow-500 to-green-600', icon: '🦁' },
-    { id: 'starburst', title: 'Starburst', provider: 'NetEnt', bgGradient: 'bg-gradient-to-br from-purple-600 to-pink-500', icon: '💎' },
+    { id: 'slot', title: 'Хуяк Олимпус', provider: 'Pragmatic Play', imageUrl: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/f814daab-841f-425b-8b54-ff8c3d7cad82.jpg', isLive: true },
+    { id: 'starlight', title: 'Пиздатая Принцесса', provider: 'Pragmatic Play', imageUrl: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/fb615e4e-328d-45b7-80ad-615bf82496fa.jpg', isLive: false },
+    { id: 'sweet', title: 'Сладкий Пиздец', provider: 'Pragmatic Play', imageUrl: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/9a1780f8-7bb6-4b07-8992-0ebc07212e25.jpg', isLive: false },
+    { id: 'wolf', title: 'Ебать Золото', provider: 'Pragmatic Play', imageUrl: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/e68b4ba2-b80d-4e75-8eb5-08b457039c5d.jpg', isLive: false },
+    { id: 'book', title: 'Хуйня Фиеста', provider: 'Play\'n GO', imageUrl: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/45968cc9-544c-47f7-940e-a940ef3704c0.jpg', isLive: false },
+    { id: 'razor', title: 'Дикий Пиздюк', provider: 'Push Gaming', imageUrl: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop', isLive: true },
+    { id: 'wanted', title: 'Заебатый Мертвец', provider: 'Hacksaw Gaming', imageUrl: 'https://images.unsplash.com/photo-1533073526757-2c8ca1df9f1c?w=400&h=300&fit=crop', isLive: false },
+    { id: 'olympus', title: 'Охуенный Олимп', provider: 'Play\'n GO', imageUrl: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=400&h=300&fit=crop', isLive: false },
+    { id: 'gorilla', title: 'Ебашит Горилла', provider: 'NetEnt', imageUrl: 'https://images.unsplash.com/photo-1551721434-8b94ddff0e6d?w=400&h=300&fit=crop', isLive: false },
+    { id: 'fire', title: 'Пиздатый Огонь', provider: 'Play\'n GO', imageUrl: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400&h=300&fit=crop', isLive: true },
+    { id: 'mega', title: 'Мега Ебанько', provider: 'Microgaming', imageUrl: 'https://images.unsplash.com/photo-1551033406-611cf9a28f67?w=400&h=300&fit=crop', isLive: false },
+    { id: 'starburst', title: 'Звёздный Пиздос', provider: 'NetEnt', imageUrl: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop', isLive: false },
   ];
 
   return (
@@ -58,36 +58,30 @@ const Index = () => {
       )}
       
       <div className="lg:ml-64">
-        <nav className="border-b-2 border-orange-500/50 backdrop-blur-sm bg-slate-900/95 sticky top-0 z-30 shadow-xl">
-          <div className="container mx-auto px-4 py-3">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <Button
-                  onClick={() => setShowSidebar(!showSidebar)}
-                  className="lg:hidden bg-orange-600 hover:bg-orange-700 p-2 h-10 w-10"
-                >
-                  <Icon name="Menu" size={20} />
-                </Button>
-                <div className="text-2xl md:text-4xl">🎰</div>
-                <h1 className="text-sm md:text-2xl font-black text-white tracking-tight">
-                  СВЯТОЗАР СЛОТ<span className="text-orange-500 hidden sm:inline"> ЕБЁТ ВСЕХ В РОТ</span>
-                </h1>
+        <div className="bg-gradient-to-r from-orange-500 via-red-600 to-orange-500 py-4 md:py-6 sticky top-0 z-30 shadow-2xl border-b-4 border-yellow-400">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <Button
+                onClick={() => setShowSidebar(!showSidebar)}
+                className="lg:hidden bg-white/20 hover:bg-white/30 p-2 h-10 w-10"
+              >
+                <Icon name="Menu" size={20} />
+              </Button>
+              <div className="lg:hidden px-3 py-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
+                <span className="text-white text-sm font-bold">{(balance / 1000000).toFixed(0)}M₽</span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="lg:hidden px-2 py-1 bg-gradient-to-r from-green-600 to-green-700 rounded border border-green-400/50">
-                  <span className="text-white text-sm font-bold">{(balance / 1000000).toFixed(0)}M₽</span>
-                </div>
-                <Button
-                  onClick={() => setCurrentGame(null)}
-                  className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-bold px-3 md:px-5 py-2 border-2 border-purple-400/50 shadow-lg text-sm md:text-base"
-                >
-                  <Icon name="Home" className="md:mr-2" size={18} />
-                  <span className="hidden md:inline">Главная</span>
-                </Button>
-              </div>
+              <Button
+                onClick={() => setCurrentGame(null)}
+                className="bg-white/20 hover:bg-white/30 text-white font-bold px-3 py-2 backdrop-blur-sm"
+              >
+                <Icon name="Home" size={18} />
+              </Button>
             </div>
+            <h1 className="text-2xl md:text-5xl lg:text-6xl font-black text-white text-center tracking-tight drop-shadow-2xl uppercase">
+              🎰 СВЯТОЗАР СЛОТ ЕБЁТ ВСЕХ В РОТ 🎰
+            </h1>
           </div>
-        </nav>
+        </div>
 
         <main className="relative container mx-auto px-4 py-6 md:py-8">
           {currentGame ? (
@@ -142,8 +136,8 @@ const Index = () => {
                       key={game.id}
                       title={game.title}
                       provider={game.provider}
-                      bgGradient={game.bgGradient}
-                      icon={game.icon}
+                      imageUrl={game.imageUrl}
+                      isLive={game.isLive}
                       onClick={() => setCurrentGame(game.id)}
                     />
                   ))}

@@ -141,17 +141,20 @@ const ClassicSlotMachine = ({ balance, onBalanceChange }: ClassicSlotMachineProp
         </div>
       )}
       {showLose && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="text-center px-4 animate-jackpot">
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-destructive mb-4 leading-tight">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-red-950/95 backdrop-blur-md animate-fade-in">
+          <div className="text-center px-4 animate-bounce">
+            <div className="text-8xl sm:text-9xl mb-8 animate-pulse">
+              {loseMessage.emoji}
+            </div>
+            <h1 className="text-5xl sm:text-6xl md:text-8xl font-black text-red-500 mb-6 leading-tight drop-shadow-[0_0_40px_rgba(239,68,68,0.8)] animate-pulse">
               {loseMessage.title}
             </h1>
-            <p className="text-2xl sm:text-3xl md:text-5xl font-bold text-foreground mb-6 leading-snug">
+            <p className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-8 leading-snug animate-pulse">
               {loseMessage.text}
             </p>
-            <p className="text-6xl sm:text-7xl md:text-9xl animate-pulse">
-              {loseMessage.emoji}
-            </p>
+            <div className="text-xl md:text-2xl text-white/70 font-semibold">
+              Проебал: {(bet / 1000000).toFixed(1)}M₽
+            </div>
           </div>
         </div>
       )}
