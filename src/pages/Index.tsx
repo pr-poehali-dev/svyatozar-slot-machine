@@ -23,21 +23,21 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/10">
       <nav className="border-b border-border/40 backdrop-blur-sm bg-background/80 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center">
-                <span className="text-2xl">🎰</span>
+        <div className="container mx-auto px-4 py-3 md:py-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-3 md:gap-0">
+            <div className="flex items-center gap-2 md:gap-3">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center">
+                <span className="text-xl md:text-2xl">🎰</span>
               </div>
-              <h1 className="text-3xl font-black bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <h1 className="text-2xl md:text-3xl font-black bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 СВЯТОЗАР
               </h1>
             </div>
-            <div className="flex items-center gap-4">
-              <Card className="px-6 py-3 bg-card/80 backdrop-blur-sm border-primary/30">
+            <div className="flex items-center gap-2 md:gap-4">
+              <Card className="px-4 py-2 md:px-6 md:py-3 bg-card/80 backdrop-blur-sm border-primary/30">
                 <div className="flex items-center gap-2">
-                  <Icon name="Wallet" size={20} className="text-secondary" />
-                  <span className="text-2xl font-bold text-foreground">
+                  <Icon name="Wallet" size={18} className="text-secondary md:w-5 md:h-5" />
+                  <span className="text-xl md:text-2xl font-bold text-foreground">
                     {balance}₽
                   </span>
                 </div>
@@ -48,30 +48,31 @@ const Index = () => {
                 onClick={addBalance}
                 className="border-secondary/50 hover:bg-secondary/10"
               >
-                <Icon name="Plus" size={16} className="mr-2" />
-                Пополнить
+                <Icon name="Plus" size={16} className="mr-1 md:mr-2" />
+                <span className="hidden sm:inline">Пополнить</span>
+                <span className="sm:hidden">+500₽</span>
               </Button>
             </div>
           </div>
         </div>
       </nav>
 
-      <main className="container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <div className="text-center space-y-4 animate-fade-in">
-            <h2 className="text-5xl font-black text-foreground">
+      <main className="container mx-auto px-4 py-6 md:py-12">
+        <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
+          <div className="text-center space-y-2 md:space-y-4 animate-fade-in">
+            <h2 className="text-3xl md:text-5xl font-black text-foreground">
               Онлайн Казино
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-base md:text-xl text-muted-foreground">
               Испытай удачу и сорви джекпот! 777 = x100
             </p>
           </div>
 
-          <div className="flex justify-center gap-4 animate-fade-in">
+          <div className="flex justify-center gap-2 md:gap-4 animate-fade-in flex-wrap">
             <Dialog open={showRules} onOpenChange={setShowRules}>
               <DialogTrigger asChild>
-                <Button variant="outline" size="lg" className="gap-2">
-                  <Icon name="BookOpen" size={20} />
+                <Button variant="outline" size="default" className="gap-2 md:text-base">
+                  <Icon name="BookOpen" size={18} className="md:w-5 md:h-5" />
                   Правила игры
                 </Button>
               </DialogTrigger>
@@ -185,8 +186,8 @@ const Index = () => {
               </DialogContent>
             </Dialog>
 
-            <Button variant="outline" size="lg" className="gap-2">
-              <Icon name="Sparkles" size={20} />
+            <Button variant="outline" size="default" className="gap-2 md:text-base">
+              <Icon name="Sparkles" size={18} className="md:w-5 md:h-5" />
               Турниры
             </Button>
           </div>
@@ -195,7 +196,7 @@ const Index = () => {
             <SlotMachine balance={balance} onBalanceChange={setBalance} />
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 mt-12">
+          <div className="grid md:grid-cols-3 gap-4 md:gap-6 mt-8 md:mt-12">
             <Card className="p-6 text-center space-y-3 bg-card/50 backdrop-blur-sm hover:scale-105 transition-transform">
               <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
                 <Icon name="Zap" size={24} className="text-primary" />
