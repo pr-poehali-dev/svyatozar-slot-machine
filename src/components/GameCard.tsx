@@ -11,7 +11,7 @@ interface GameCardProps {
 const GameCard = ({ title, provider, imageUrl, onClick, isLive = false }: GameCardProps) => {
   return (
     <Card 
-      className="relative overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300 hover:shadow-2xl border-0 h-44 group rounded-2xl"
+      className="relative overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-200 border-0 h-32 md:h-40 group rounded-lg"
       onClick={onClick}
     >
       <img 
@@ -19,20 +19,20 @@ const GameCard = ({ title, provider, imageUrl, onClick, isLive = false }: GameCa
         alt={title}
         className="absolute inset-0 w-full h-full object-cover"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-      <div className="relative h-full p-3 flex flex-col justify-between">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+      <div className="relative h-full p-2 flex flex-col justify-between">
         <div>
           {isLive && (
-            <div className="inline-block bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+            <div className="inline-block bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">
               LIVE
             </div>
           )}
         </div>
         <div>
-          <p className="text-white/90 text-xs font-semibold mb-1">
+          <p className="text-white/70 text-[10px] font-medium mb-0.5 hidden md:block">
             {provider}
           </p>
-          <h3 className="text-white font-bold text-base drop-shadow-lg">
+          <h3 className="text-white font-bold text-xs md:text-sm drop-shadow-lg line-clamp-2">
             {title}
           </h3>
         </div>

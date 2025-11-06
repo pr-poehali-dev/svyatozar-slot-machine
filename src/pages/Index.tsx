@@ -38,8 +38,7 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-20"></div>
+    <div className="min-h-screen bg-[#1a1f2e] relative overflow-hidden">
       
       <div className={`hidden lg:block fixed left-0 top-0 z-40`}>
         <Sidebar balance={balance} onBalanceChange={setBalance} />
@@ -58,79 +57,74 @@ const Index = () => {
       )}
       
       <div className="lg:ml-64">
-        <div className="bg-gradient-to-r from-orange-500 via-red-600 to-orange-500 py-4 md:py-6 sticky top-0 z-30 shadow-2xl border-b-4 border-yellow-400">
-          <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between gap-2 mb-2">
+        <div className="bg-[#0f1419] border-b border-gray-800 sticky top-0 z-30">
+          <div className="max-w-7xl mx-auto px-3 py-2 flex items-center justify-between">
+            <div className="flex items-center gap-3">
               <Button
                 onClick={() => setShowSidebar(!showSidebar)}
-                className="lg:hidden bg-white/20 hover:bg-white/30 p-2 h-10 w-10"
+                className="lg:hidden bg-gray-800 hover:bg-gray-700 p-2 h-9 w-9"
               >
-                <Icon name="Menu" size={20} />
+                <Icon name="Menu" size={18} />
               </Button>
-              <div className="lg:hidden px-3 py-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
+              <div className="text-orange-500 font-black text-lg md:text-2xl tracking-tight">
+                🎰 СВЯТОЗАР
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="px-3 py-1.5 bg-green-600 rounded-md">
                 <span className="text-white text-sm font-bold">{(balance / 1000000).toFixed(0)}M₽</span>
               </div>
               <Button
                 onClick={() => setCurrentGame(null)}
-                className="bg-white/20 hover:bg-white/30 text-white font-bold px-3 py-2 backdrop-blur-sm"
+                className="bg-gray-800 hover:bg-gray-700 text-white px-3 py-1.5 h-auto text-sm"
               >
-                <Icon name="Home" size={18} />
+                <Icon name="Home" size={16} />
               </Button>
             </div>
-            <h1 className="text-2xl md:text-5xl lg:text-6xl font-black text-white text-center tracking-tight drop-shadow-2xl uppercase">
-              🎰 СВЯТОЗАР СЛОТ ЕБЁТ ВСЕХ В РОТ 🎰
-            </h1>
           </div>
         </div>
 
-        <main className="relative container mx-auto px-4 py-6 md:py-8">
+        <main className="relative max-w-7xl mx-auto px-3 py-4">
           {currentGame ? (
             <div className="max-w-4xl mx-auto">
               <ClassicSlotMachine balance={balance} onBalanceChange={setBalance} />
             </div>
           ) : (
-            <div className="max-w-7xl mx-auto space-y-6">
-              <div className="relative text-center space-y-3 md:space-y-5 animate-fade-in overflow-hidden rounded-2xl">
-                <div className="relative bg-gradient-to-r from-orange-500 via-red-600 to-orange-500 text-white px-6 md:px-12 py-6 md:py-8 border-4 border-yellow-400/80 shadow-2xl">
-                  <div className="absolute top-4 left-4 w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white shadow-xl">
-                    <img src={faceUrl} alt="Bonus" className="w-full h-full object-cover" />
+            <div className="space-y-4">
+              <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-green-600 via-green-500 to-green-600 h-40 md:h-52">
+                <img 
+                  src="https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/6f73716c-38f0-482c-9097-a14c1fbb88d9.jpg" 
+                  alt="Bonus"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40"></div>
+                <div className="relative h-full flex flex-col justify-center px-6 md:px-12">
+                  <div className="max-w-md">
+                    <h2 className="text-xl md:text-3xl font-black text-white mb-2 leading-tight">
+                      БОНУС НА ПЕРВЫЙ ДЕПОЗИТ
+                    </h2>
+                    <p className="text-2xl md:text-4xl font-black text-yellow-400 mb-3">
+                      150 000 000₽ + 150 FS
+                    </p>
+                    <Button className="bg-green-500 hover:bg-green-400 text-white font-black text-sm md:text-base px-6 py-2 rounded-lg">
+                      ПОПОЛНИТЬ СЧЁТ
+                    </Button>
                   </div>
-                  <div className="absolute top-4 right-4 w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white shadow-xl">
-                    <img src={faceUrl} alt="Bonus" className="w-full h-full object-cover" />
-                  </div>
-                  <h2 className="text-xl md:text-3xl font-black uppercase tracking-wide mb-2">
-                    🎰 БОНУС ЗА РЕГИСТРАЦИЮ 🎰
-                  </h2>
-                  <p className="text-3xl md:text-5xl font-black">
-                    150 000 000 ₽ + 150 ФРИСПИНОВ
-                  </p>
-                  <Button className="mt-4 bg-white text-red-600 hover:bg-gray-100 font-black text-lg md:text-xl px-8 py-6">
-                    КАССА
-                  </Button>
                 </div>
-              </div>
-
-              <div className="flex justify-center gap-2 md:gap-4 animate-fade-in flex-wrap">
-                <Button className="gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold border-2 border-blue-400/50 shadow-lg px-8 py-6 text-lg">
-                  <Icon name="Medal" size={20} />
-                  Лобби
-                </Button>
-                <Button className="gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold border-2 border-purple-400/50 shadow-lg px-8 py-6 text-lg">
-                  <Icon name="Gamepad2" size={20} />
-                  Провайдеры
-                </Button>
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-white text-2xl font-black">🎰 Популярные игры</h3>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-white text-lg md:text-xl font-bold flex items-center gap-2">
+                    <span className="text-orange-500">🔥</span> Популярные игры
+                  </h3>
                   <input 
                     type="text" 
-                    placeholder="Поиск игр..."
-                    className="bg-slate-800 text-white px-4 py-2 rounded-lg border-2 border-white/20 w-64"
+                    placeholder="Поиск..."
+                    className="bg-[#0f1419] text-white px-3 py-2 rounded-lg border border-gray-700 text-sm w-32 md:w-48 focus:outline-none focus:border-orange-500"
                   />
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3">
                   {games.map((game) => (
                     <GameCard
                       key={game.id}
