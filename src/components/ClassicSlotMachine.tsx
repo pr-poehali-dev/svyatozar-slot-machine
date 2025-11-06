@@ -10,7 +10,7 @@ interface ClassicSlotMachineProps {
 const ClassicSlotMachine = ({ balance, onBalanceChange }: ClassicSlotMachineProps) => {
   const [reels, setReels] = useState<string[]>(['face', 'face', 'face']);
   const [spinning, setSpinning] = useState(false);
-  const [bet, setBet] = useState(1000);
+  const [bet, setBet] = useState(50000);
   const [lastWin, setLastWin] = useState<number | null>(null);
   const [showJackpot, setShowJackpot] = useState(false);
   const [showLose, setShowLose] = useState(false);
@@ -118,7 +118,7 @@ const ClassicSlotMachine = ({ balance, onBalanceChange }: ClassicSlotMachineProp
 
   const changeBet = (amount: number) => {
     const newBet = bet + amount;
-    if (newBet >= 10 && newBet <= 10000000) {
+    if (newBet >= 10000 && newBet <= 50000000) {
       setBet(newBet);
     }
   };
@@ -238,19 +238,19 @@ const ClassicSlotMachine = ({ balance, onBalanceChange }: ClassicSlotMachineProp
                   <div className="flex items-center gap-2">
                     <Button
                       size="sm"
-                      onClick={() => changeBet(-1000)}
-                      disabled={spinning || bet <= 10}
+                      onClick={() => changeBet(-10000)}
+                      disabled={spinning || bet <= 10000}
                       className="bg-yellow-600 hover:bg-yellow-700 text-black font-bold h-8 w-8 p-0"
                     >
                       <Icon name="Minus" size={16} />
                     </Button>
-                    <span className="text-yellow-400 text-xl md:text-2xl font-black min-w-[100px] text-center">
+                    <span className="text-yellow-400 text-xl md:text-2xl font-black min-w-[120px] text-center">
                       {bet.toLocaleString()}₽
                     </span>
                     <Button
                       size="sm"
-                      onClick={() => changeBet(1000)}
-                      disabled={spinning || bet >= 10000000}
+                      onClick={() => changeBet(10000)}
+                      disabled={spinning || bet >= 50000000}
                       className="bg-yellow-600 hover:bg-yellow-700 text-black font-bold h-8 w-8 p-0"
                     >
                       <Icon name="Plus" size={16} />
