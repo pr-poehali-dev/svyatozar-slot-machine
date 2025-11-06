@@ -18,6 +18,7 @@ const Index = () => {
   const [balance, setBalance] = useState(50000000);
   const [showRules, setShowRules] = useState(false);
   const [currentGame, setCurrentGame] = useState<string | null>(null);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const faceUrl = 'https://cdn.poehali.dev/files/531d6c39-e90b-4aa4-b66e-12b444f697fd.jpg';
 
@@ -37,28 +38,53 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden flex">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-20"></div>
       
-      <Sidebar balance={balance} onBalanceChange={setBalance} />
+      <div className={`hidden lg:block fixed left-0 top-0 z-40`}>
+        <Sidebar balance={balance} onBalanceChange={setBalance} />
+      </div>
       
-      <div className="flex-1">
-        <nav className="border-b-2 border-orange-500/50 backdrop-blur-sm bg-slate-900/95 sticky top-0 z-50 shadow-xl">
+      {showSidebar && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+            onClick={() => setShowSidebar(false)}
+          ></div>
+          <div className="fixed left-0 top-0 z-50 lg:hidden animate-fade-in">
+            <Sidebar balance={balance} onBalanceChange={setBalance} />
+          </div>
+        </>
+      )}
+      
+      <div className="lg:ml-64">
+        <nav className="border-b-2 border-orange-500/50 backdrop-blur-sm bg-slate-900/95 sticky top-0 z-30 shadow-xl">
           <div className="container mx-auto px-4 py-3">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="text-3xl md:text-4xl">🎰</div>
-                <h1 className="text-lg md:text-2xl font-black text-white tracking-tight">
-                  СВЯТОЗАР СЛОТ<span className="text-orange-500"> ЕБЁТ ВСЕХ В РОТ</span>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={() => setShowSidebar(!showSidebar)}
+                  className="lg:hidden bg-orange-600 hover:bg-orange-700 p-2 h-10 w-10"
+                >
+                  <Icon name="Menu" size={20} />
+                </Button>
+                <div className="text-2xl md:text-4xl">🎰</div>
+                <h1 className="text-sm md:text-2xl font-black text-white tracking-tight">
+                  СВЯТОЗАР СЛОТ<span className="text-orange-500 hidden sm:inline"> ЕБЁТ ВСЕХ В РОТ</span>
                 </h1>
               </div>
-              <Button
-                onClick={() => setCurrentGame(null)}
-                className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-bold px-5 py-2 border-2 border-purple-400/50 shadow-lg"
-              >
-                <Icon name="Home" className="mr-2" size={18} />
-                Главная
-              </Button>
+              <div className="flex items-center gap-2">
+                <div className="lg:hidden px-2 py-1 bg-gradient-to-r from-green-600 to-green-700 rounded border border-green-400/50">
+                  <span className="text-white text-sm font-bold">{(balance / 1000000).toFixed(0)}M₽</span>
+                </div>
+                <Button
+                  onClick={() => setCurrentGame(null)}
+                  className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-bold px-3 md:px-5 py-2 border-2 border-purple-400/50 shadow-lg text-sm md:text-base"
+                >
+                  <Icon name="Home" className="md:mr-2" size={18} />
+                  <span className="hidden md:inline">Главная</span>
+                </Button>
+              </div>
             </div>
           </div>
         </nav>
