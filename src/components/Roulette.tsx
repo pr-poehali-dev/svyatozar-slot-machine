@@ -145,21 +145,25 @@ const Roulette = ({ balance, onBalanceChange }: RouletteProps) => {
             }`}>
               {result}
             </div>
-            <h2 className={`text-5xl md:text-7xl font-black mb-4 ${
+            <h2 className={`text-5xl md:text-7xl font-black mb-4 animate-pulse ${
               totalWin > 0 ? 'text-green-500' : 'text-red-500'
             }`}>
-              {totalWin > 0 ? 'ВЫИГРЫШ!' : 'ПРОИГРАЛ!'}
+              {totalWin > 0 ? '🎉 ЕБАТЬ ВЫИГРАЛ! 🎉' : '💀 ПРОЕБАЛ, ЛОХ! 💀'}
             </h2>
-            {totalWin > 0 && (
-              <p className="text-4xl md:text-5xl font-bold text-white mb-6">
+            {totalWin > 0 ? (
+              <p className="text-4xl md:text-5xl font-bold text-green-400 mb-6 animate-pulse">
                 +{(totalWin / 1000000).toFixed(1)}M₽
+              </p>
+            ) : (
+              <p className="text-xl md:text-2xl text-white/70 font-semibold mb-6">
+                Проебал: {(totalBetAmount / 1000000).toFixed(1)}M₽
               </p>
             )}
             <Button
               onClick={() => setShowResult(false)}
               className="bg-orange-600 hover:bg-orange-500 text-white font-bold px-8 py-4 text-lg"
             >
-              Продолжить
+              {totalWin > 0 ? 'ЕЩЁ КРУТИТЬ!' : 'ДАВАЙ ЕЩЁ РАЗ'}
             </Button>
           </div>
         </div>
