@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
@@ -14,6 +14,7 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
   const [spinning, setSpinning] = useState(false);
   const [bet, setBet] = useState(10);
   const [lastWin, setLastWin] = useState<number | null>(null);
+  const [showJackpot, setShowJackpot] = useState(false);
 
   const symbols = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -59,10 +60,8 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
         const jackpotWin = bet * 100;
         setLastWin(jackpotWin);
         onBalanceChange(balance + jackpotWin);
-        toast.success('🎰 СВЯТОЗАР И МАКСИМ - ПИЗДУЙТЕ РАБОТАТЬ НА УЛИЦУ!', {
-          description: `Джекпот ${jackpotWin}₽!`,
-          duration: 8000
-        });
+        setShowJackpot(true);
+        setTimeout(() => setShowJackpot(false), 8000);
       } else {
         const normalWin = bet * 10;
         setLastWin(normalWin);
@@ -87,8 +86,24 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
   };
 
   return (
-    <Card className="p-4 md:p-8 bg-card/50 backdrop-blur-sm border-2 border-primary/30 shadow-2xl">
-      <div className="space-y-4 md:space-y-6">
+    <>
+      {showJackpot && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="text-center px-4 animate-jackpot">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-secondary mb-4 leading-tight">
+              🎰 ДЖЕКПОТ! 🎰
+            </h1>
+            <p className="text-2xl sm:text-3xl md:text-5xl font-bold text-foreground mb-6 leading-snug">
+              СВЯТОЗАР И МАКСИМ -<br />ПИЗДУЙТЕ РАБОТАТЬ<br />НА УЛИЦУ!
+            </p>
+            <p className="text-3xl sm:text-4xl md:text-6xl font-black text-secondary animate-pulse">
+              +{lastWin}₽
+            </p>
+          </div>
+        </div>
+      )}
+      <Card className="p-4 md:p-8 bg-card/50 backdrop-blur-sm border-2 border-primary/30 shadow-2xl relative">
+        <div className="space-y-4 md:space-y-6">
         <div className="flex justify-center gap-2 md:gap-4">
           {reels.map((symbol, index) => (
             <div
@@ -171,6 +186,7 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
         </div>
       </div>
     </Card>
+    </>
   );
 };
 
