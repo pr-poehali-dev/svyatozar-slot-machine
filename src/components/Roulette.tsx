@@ -25,6 +25,8 @@ const Roulette = ({ balance, onBalanceChange }: RouletteProps) => {
   const [showResultPopup, setShowResultPopup] = useState(false);
   const [winAmount, setWinAmount] = useState(0);
   const [particles, setParticles] = useState<Array<{id: number; x: number; y: number}>>([]);
+  const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 });
+  const [ballSpinning, setBallSpinning] = useState(false);
 
   const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
   const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
@@ -62,6 +64,7 @@ const Roulette = ({ balance, onBalanceChange }: RouletteProps) => {
     if (bets.length === 0 || spinning) return;
 
     setSpinning(true);
+    setBallSpinning(true);
     playSound('spin');
     const spinResult = Math.floor(Math.random() * 37);
     const spinRotations = 8 + Math.random() * 4;
@@ -70,7 +73,16 @@ const Roulette = ({ balance, onBalanceChange }: RouletteProps) => {
 
     setRotation(finalRotation);
     
+    const ballInterval = setInterval(() => {
+      setBallPosition({
+        x: 50 + Math.cos(Date.now() / 100) * 45,
+        y: 50 + Math.sin(Date.now() / 100) * 45
+      });
+    }, 50);
+    
     setTimeout(() => {
+      clearInterval(ballInterval);
+      setBallSpinning(false);
       setResult(spinResult);
       setHistory([spinResult, ...history.slice(0, 9)]);
       calculateWinnings(spinResult);
@@ -306,6 +318,19 @@ const Roulette = ({ balance, onBalanceChange }: RouletteProps) => {
                       <div className="text-black text-xs font-bold text-center">ROULETTE</div>
                     </div>
                   </div>
+                  
+                  {ballSpinning && (
+                    <div 
+                      className="absolute w-5 h-5 rounded-full bg-white shadow-2xl border-2 border-gray-400 transition-all duration-100"
+                      style={{
+                        left: `${ballPosition.x}%`,
+                        top: `${ballPosition.y}%`,
+                        transform: 'translate(-50%, -50%)'
+                      }}
+                    >
+                      <div className="absolute inset-1 rounded-full bg-gradient-to-br from-gray-200 to-gray-400"></div>
+                    </div>
+                  )}
                   
                   <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2 w-0 h-0 border-l-[15px] border-r-[15px] border-t-[30px] border-l-transparent border-r-transparent border-t-[#c9b037] drop-shadow-lg z-10"></div>
                 </div>

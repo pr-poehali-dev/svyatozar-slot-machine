@@ -17,6 +17,7 @@ const Index = () => {
   const [currentGame, setCurrentGame] = useState<string | null>(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [showAdPopup, setShowAdPopup] = useState(false);
 
   const categories = [
     { id: 'all', name: 'Все игры', icon: '🎰' },
@@ -49,6 +50,24 @@ const Index = () => {
     ? games 
     : games.filter(game => game.category === selectedCategory);
 
+  const adMessages = [
+    { emoji: '🔥💃', text: 'ТОЛЬКО СЕЙЧАС! ГОРЯЧИЕ БАБЫ ЖДУТ ТЕБЯ!', subtext: 'Жми сюда чтобы выиграть бонус 50M₽' },
+    { emoji: '💦💋', text: 'НЕ ПОВЕРИШЬ! САМЫЕ СЕКСИ КАЗИНО!', subtext: 'Регистрируйся и получи доступ к VIP-зоне' },
+    { emoji: '🍆😈', text: 'ДЕВОЧКИ РЯДОМ! ЖМИ СЮДА!', subtext: 'Выиграй 100M₽ и пойди на свидание' },
+    { emoji: '🔞💃', text: 'НЕ ХОЧЕШЬ ОСТАТЬСЯ ДЕВСТВЕННИКОМ?', subtext: 'Тогда играй на СВЯТОЗАРЕ - тут все ебутся!' },
+    { emoji: '💸🤑', text: 'ТЫ ЛОХ ЕСЛИ НЕ ЖМЕШЬ СЮДА!', subtext: 'Бесплатный бонус 200M₽ только сейчас!' }
+  ];
+
+  useState(() => {
+    const interval = setInterval(() => {
+      if (!currentGame && Math.random() > 0.3) {
+        setShowAdPopup(true);
+        setTimeout(() => setShowAdPopup(false), 5000);
+      }
+    }, 15000);
+    return () => clearInterval(interval);
+  });
+
   const renderGame = () => {
     switch (currentGame) {
       case 'slot':
@@ -80,6 +99,33 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-[#1a1f2e] relative overflow-hidden">
+      {showAdPopup && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in" onClick={() => setShowAdPopup(false)}>
+          <div className="relative bg-gradient-to-br from-pink-600 via-purple-600 to-red-600 rounded-2xl p-8 max-w-md mx-4 shadow-2xl border-4 border-yellow-400 animate-pulse" onClick={(e) => e.stopPropagation()}>
+            <button
+              onClick={() => setShowAdPopup(false)}
+              className="absolute top-2 right-2 w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full text-white font-bold"
+            >
+              ✕
+            </button>
+            <div className="text-center">
+              <div className="text-7xl mb-4 animate-bounce">{adMessages[Math.floor(Math.random() * adMessages.length)].emoji}</div>
+              <h2 className="text-3xl font-black text-white mb-4 leading-tight">
+                {adMessages[Math.floor(Math.random() * adMessages.length)].text}
+              </h2>
+              <p className="text-lg text-white/90 mb-6">
+                {adMessages[Math.floor(Math.random() * adMessages.length)].subtext}
+              </p>
+              <button
+                onClick={() => setShowAdPopup(false)}
+                className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-black text-xl py-4 rounded-lg transition-all transform hover:scale-105"
+              >
+                ЖМИ СЮДА ЗАЕБИСЬ! 🔥
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
       <div className={`hidden lg:block fixed left-0 top-0 z-40`}>
         <Sidebar balance={balance} onBalanceChange={setBalance} />

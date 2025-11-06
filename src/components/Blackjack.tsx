@@ -19,6 +19,8 @@ const Blackjack = ({ balance, onBalanceChange }: BlackjackProps) => {
   const [bet, setBet] = useState(100000);
   const [gameState, setGameState] = useState<'betting' | 'playing' | 'finished'>('betting');
   const [result, setResult] = useState<string>('');
+  const [showResultPopup, setShowResultPopup] = useState(false);
+  const [particles, setParticles] = useState<Array<{id: number; x: number; y: number}>>([]);
 
   const suits = ['♠', '♥', '♣', '♦'];
   const suitColors: Record<string, string> = {
@@ -120,6 +122,17 @@ const Blackjack = ({ balance, onBalanceChange }: BlackjackProps) => {
     if (winAmount > 0) {
       if (resultText.includes('WIN')) {
         playSound('win');
+        
+        for (let i = 0; i < 25; i++) {
+          setTimeout(() => {
+            setParticles(prev => [...prev, {
+              id: Date.now() + Math.random(),
+              x: Math.random() * 100,
+              y: Math.random() * 100
+            }]);
+          }, i * 50);
+        }
+        setTimeout(() => setParticles([]), 3000);
       }
       onBalanceChange(balance + winAmount);
     } else {
@@ -128,6 +141,8 @@ const Blackjack = ({ balance, onBalanceChange }: BlackjackProps) => {
 
     setResult(resultText);
     setGameState('finished');
+    setShowResultPopup(true);
+    setTimeout(() => setShowResultPopup(false), 3500);
   };
 
   const resetGame = () => {
@@ -164,8 +179,68 @@ const Blackjack = ({ balance, onBalanceChange }: BlackjackProps) => {
   const playerScore = calculateScore(playerCards);
   const dealerScore = calculateScore(dealerCards);
 
+  const loseMessages = [
+    '😂 ПРОЕБАЛ СУКА!',
+    '💀 ХА-ХА ЛОХ!',
+    '🤡 ПИДОРАС НЕУДАЧНИК!',
+    '🖕 ИДИ НАХУЙ!'
+  ];
+
+  const winMessages = [
+    '🎉 ОХУЕТЬ ВЫИГРАЛ!',
+    '💰 ПИЗДАТЫЙ ВЫИГРЫШ!',
+    '🚀 ЗАЕБИСЬ БЛЯТЬ!',
+    '🔥 ЕБАТЬ КРАСАВЧИК!'
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a4d2e] via-[#0d5c38] to-[#0a4d2e] p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#0a4d2e] via-[#0d5c38] to-[#0a4d2e] p-4 relative overflow-hidden">
+      {particles.map(particle => (
+        <div
+          key={particle.id}
+          className="absolute text-4xl animate-ping pointer-events-none"
+          style={{
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+            animation: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite'
+          }}
+        >
+          🎴
+        </div>
+      ))}
+
+      {showResultPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-fade-in">
+          <div className="text-center px-4">
+            {result.includes('WIN') ? (
+              <>
+                <div className="text-9xl mb-8 animate-bounce">🎉🎴🎉</div>
+                <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight text-green-400 animate-pulse drop-shadow-2xl">
+                  {winMessages[Math.floor(Math.random() * winMessages.length)]}
+                </h1>
+                <div className="text-6xl md:text-8xl font-black text-[#FFD700] mb-4 animate-pulse">
+                  +{((bet * (result.includes('BLACKJACK') ? 2.5 : 2)) / 1000000).toFixed(1)}M₽
+                </div>
+              </>
+            ) : result.includes('PUSH') ? (
+              <>
+                <div className="text-9xl mb-8">🤝</div>
+                <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight text-blue-400">
+                  НИЧЬЯ - ВЕРНУЛИ СТАВКУ
+                </h1>
+              </>
+            ) : (
+              <>
+                <div className="text-9xl mb-8 animate-bounce">💀🤡💀</div>
+                <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight text-red-500 animate-pulse drop-shadow-2xl">
+                  {loseMessages[Math.floor(Math.random() * loseMessages.length)]}
+                </h1>
+                <div className="text-4xl text-red-400 font-bold">Проебал: {(bet / 1000000).toFixed(1)}M₽</div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
       <div className="max-w-6xl mx-auto">
         <div className="bg-[#1a1a1a] border border-[#2d5f3f] rounded-lg p-6 mb-4 shadow-2xl">
           <div className="flex items-center justify-between">
