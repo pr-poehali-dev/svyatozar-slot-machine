@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import Icon from '@/components/ui/icon';
+import { playSound } from '@/utils/sounds';
 
 interface BlackjackProps {
   balance: number;
@@ -18,11 +17,16 @@ const Blackjack = ({ balance, onBalanceChange }: BlackjackProps) => {
   const [playerCards, setPlayerCards] = useState<CardType[]>([]);
   const [dealerCards, setDealerCards] = useState<CardType[]>([]);
   const [bet, setBet] = useState(100000);
-  const [gameState, setGameState] = useState<'betting' | 'playing' | 'dealer' | 'finished'>('betting');
+  const [gameState, setGameState] = useState<'betting' | 'playing' | 'finished'>('betting');
   const [result, setResult] = useState<string>('');
-  const [showResult, setShowResult] = useState(false);
 
-  const suits = ['♠️', '♥️', '♣️', '♦️'];
+  const suits = ['♠', '♥', '♣', '♦'];
+  const suitColors: Record<string, string> = {
+    '♠': 'text-black',
+    '♣': 'text-black',
+    '♥': 'text-red-600',
+    '♦': 'text-red-600',
+  };
   const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
   const getCardPoints = (value: string): number => {
@@ -52,6 +56,7 @@ const Blackjack = ({ balance, onBalanceChange }: BlackjackProps) => {
   const startGame = () => {
     if (balance < bet) return;
 
+    playSound('deal');
     onBalanceChange(balance - bet);
     const player = [drawCard(), drawCard()];
     const dealer = [drawCard(), drawCard()];
@@ -59,7 +64,6 @@ const Blackjack = ({ balance, onBalanceChange }: BlackjackProps) => {
     setPlayerCards(player);
     setDealerCards(dealer);
     setGameState('playing');
-    setShowResult(false);
     setResult('');
 
     if (calculateScore(player) === 21) {
@@ -68,6 +72,7 @@ const Blackjack = ({ balance, onBalanceChange }: BlackjackProps) => {
   };
 
   const hit = () => {
+    playSound('card');
     const newPlayerCards = [...playerCards, drawCard()];
     setPlayerCards(newPlayerCards);
 
@@ -77,207 +82,205 @@ const Blackjack = ({ balance, onBalanceChange }: BlackjackProps) => {
   };
 
   const stand = () => {
-    setGameState('dealer');
-    const newDealerCards = [...dealerCards];
+    let newDealerCards = [...dealerCards];
 
     while (calculateScore(newDealerCards) < 17) {
-      newDealerCards.push(drawCard());
+      newDealerCards = [...newDealerCards, drawCard()];
     }
 
     setDealerCards(newDealerCards);
-    setTimeout(() => endGame(playerCards, newDealerCards), 1000);
+    endGame(playerCards, newDealerCards);
   };
 
-  const endGame = (playerHand: CardType[], dealerHand: CardType[]) => {
-    const playerScore = calculateScore(playerHand);
-    const dealerScore = calculateScore(dealerHand);
+  const endGame = (playerFinal: CardType[], dealerFinal: CardType[]) => {
+    const playerScore = calculateScore(playerFinal);
+    const dealerScore = calculateScore(dealerFinal);
 
     let resultText = '';
     let winAmount = 0;
 
     if (playerScore > 21) {
-      resultText = '💀 ПЕРЕБОР, ЛОХ! 💀';
+      resultText = 'BUST - DEALER WINS';
     } else if (dealerScore > 21) {
-      resultText = '🎉 ДИЛЕР ПРОЕБАЛ! 🎉';
+      resultText = 'DEALER BUST - YOU WIN!';
       winAmount = bet * 2;
+    } else if (playerScore === 21 && playerFinal.length === 2) {
+      resultText = 'BLACKJACK! YOU WIN!';
+      winAmount = bet * 2.5;
     } else if (playerScore > dealerScore) {
-      resultText = '🎉 ЕБАТЬ ВЫИГРАЛ! 🎉';
+      resultText = 'YOU WIN!';
       winAmount = bet * 2;
     } else if (playerScore === dealerScore) {
-      resultText = '😐 НИЧЬЯ, ЗАБИРАЙ';
+      resultText = 'PUSH - TIE';
       winAmount = bet;
     } else {
-      resultText = '💀 ПРОЕБАЛ, ПИДОР! 💀';
+      resultText = 'DEALER WINS';
+    }
+
+    if (winAmount > 0) {
+      if (resultText.includes('WIN')) {
+        playSound('win');
+      }
+      onBalanceChange(balance + winAmount);
+    } else {
+      playSound('lose');
     }
 
     setResult(resultText);
     setGameState('finished');
-    setShowResult(true);
-
-    if (winAmount > 0) {
-      onBalanceChange(balance + winAmount);
-    }
-
-    setTimeout(() => setShowResult(false), 4000);
   };
 
-  const changeBet = (amount: number) => {
-    const newBet = bet + amount;
-    if (newBet >= 10000 && newBet <= 10000000) {
-      setBet(newBet);
-    }
-  };
-
-  const reset = () => {
+  const resetGame = () => {
     setPlayerCards([]);
     setDealerCards([]);
     setGameState('betting');
     setResult('');
-    setShowResult(false);
   };
 
-  return (
-    <>
-      {showResult && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-fade-in">
-          <div className="text-center px-4">
-            <div className="text-9xl mb-8 animate-bounce">
-              {result.includes('ВЫИГРАЛ') || result.includes('ПРОЕБАЛ') ? '🎰' : result.includes('НИЧЬЯ') ? '😐' : '💀'}
-            </div>
-            <h1 className={`text-5xl md:text-7xl font-black mb-6 leading-tight drop-shadow-2xl animate-pulse ${
-              result.includes('ВЫИГРАЛ') ? 'text-green-500' : result.includes('НИЧЬЯ') ? 'text-yellow-500' : 'text-red-500'
-            }`}>
-              {result}
-            </h1>
-            <div className="text-3xl md:text-5xl font-bold text-white mb-4">
-              Твои очки: <span className="text-yellow-400">{calculateScore(playerCards)}</span>
-            </div>
-            <div className="text-3xl md:text-5xl font-bold text-white mb-4">
-              Дилер: <span className="text-yellow-400">{calculateScore(dealerCards)}</span>
-            </div>
+  const betOptions = [10000, 50000, 100000, 500000, 1000000];
+
+  const renderCard = (card: CardType, hidden: boolean = false) => (
+    <div className="relative w-24 h-36 bg-white rounded-lg shadow-2xl border-2 border-gray-300">
+      {hidden ? (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1a4d2e] to-[#0d3b2a] rounded-lg flex items-center justify-center">
+          <div className="w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB4PSIwIiB5PSIwIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxjaXJjbGUgY3g9IjEwIiBjeT0iMTAiIHI9IjIiIGZpbGw9IiNmZmQ3MDAiIG9wYWNpdHk9IjAuMyIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==')] opacity-30"></div>
+        </div>
+      ) : (
+        <div className="absolute inset-0 p-2 flex flex-col justify-between">
+          <div className={`text-2xl font-bold ${suitColors[card.suit]}`}>
+            {card.value}
+          </div>
+          <div className={`text-4xl ${suitColors[card.suit]} text-center`}>
+            {card.suit}
+          </div>
+          <div className={`text-2xl font-bold ${suitColors[card.suit]} text-right transform rotate-180`}>
+            {card.value}
           </div>
         </div>
       )}
+    </div>
+  );
 
-      <div className="max-w-5xl mx-auto space-y-4">
-        <Card className="bg-gradient-to-br from-green-800 to-green-900 border-8 border-yellow-600 p-4 md:p-6">
-          <div className="text-center mb-6">
-            <h2 className="text-white text-3xl md:text-4xl font-black mb-2">♠️ БЛЭКДЖЕК 21 ♥️</h2>
-            <p className="text-yellow-400 text-lg font-bold">Набери 21 или больше дилера!</p>
-          </div>
+  const playerScore = calculateScore(playerCards);
+  const dealerScore = calculateScore(dealerCards);
 
-          <div className="space-y-6">
-            <div className="bg-green-900/50 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-white font-bold text-lg">ДИЛЕР</span>
-                <span className="text-yellow-400 font-black text-2xl">
-                  {gameState === 'playing' ? '?' : calculateScore(dealerCards)}
-                </span>
-              </div>
-              <div className="flex gap-2 justify-center flex-wrap">
-                {dealerCards.map((card, i) => (
-                  <div
-                    key={i}
-                    className={`w-16 h-24 md:w-20 md:h-32 bg-white rounded-lg shadow-xl flex flex-col items-center justify-center border-4 border-gray-300 ${
-                      gameState === 'playing' && i === 1 ? 'bg-gradient-to-br from-red-600 to-red-800' : ''
-                    }`}
-                  >
-                    {gameState === 'playing' && i === 1 ? (
-                      <div className="text-4xl">🎴</div>
-                    ) : (
-                      <>
-                        <div className={`text-3xl md:text-4xl ${['♥️', '♦️'].includes(card.suit) ? 'text-red-600' : 'text-black'}`}>
-                          {card.suit}
-                        </div>
-                        <div className="text-xl md:text-2xl font-black text-gray-900">{card.value}</div>
-                      </>
-                    )}
-                  </div>
-                ))}
-              </div>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[#0a4d2e] via-[#0d5c38] to-[#0a4d2e] p-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-[#1a1a1a] border border-[#2d5f3f] rounded-lg p-6 mb-4 shadow-2xl">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-[#c9b037] text-sm font-medium mb-1">BLACKJACK</div>
+              <div className="text-white text-2xl font-bold">Evolution Gaming</div>
             </div>
-
-            <div className="bg-green-900/50 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-white font-bold text-lg">ТЫ</span>
-                <span className="text-yellow-400 font-black text-2xl">{calculateScore(playerCards)}</span>
-              </div>
-              <div className="flex gap-2 justify-center flex-wrap">
-                {playerCards.map((card, i) => (
-                  <div
-                    key={i}
-                    className="w-16 h-24 md:w-20 md:h-32 bg-white rounded-lg shadow-xl flex flex-col items-center justify-center border-4 border-gray-300 animate-fade-in"
-                  >
-                    <div className={`text-3xl md:text-4xl ${['♥️', '♦️'].includes(card.suit) ? 'text-red-600' : 'text-black'}`}>
-                      {card.suit}
-                    </div>
-                    <div className="text-xl md:text-2xl font-black text-gray-900">{card.value}</div>
-                  </div>
-                ))}
-              </div>
+            <div className="text-right">
+              <div className="text-gray-400 text-xs mb-1">BALANCE</div>
+              <div className="text-[#c9b037] text-2xl font-bold">{balance.toLocaleString('ru-RU')} ₽</div>
             </div>
           </div>
-        </Card>
+        </div>
 
-        <Card className="bg-[#0f1419] border border-gray-800 p-4">
-          {gameState === 'betting' && (
-            <div className="space-y-4">
-              <div className="bg-gray-900 rounded-lg p-4 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-white text-sm font-semibold">Ставка:</span>
-                  <span className="text-white text-xl font-black">{(bet / 1000000).toFixed(1)}M₽</span>
-                </div>
-                <div className="flex gap-2">
-                  <Button onClick={() => changeBet(-100000)} className="flex-1 bg-gray-800 hover:bg-gray-700">
-                    <Icon name="Minus" size={18} />
-                  </Button>
-                  <Button onClick={() => changeBet(100000)} className="flex-1 bg-gray-800 hover:bg-gray-700">
-                    <Icon name="Plus" size={18} />
-                  </Button>
-                </div>
+        <div className="bg-gradient-to-br from-[#0d5c38] to-[#0a4d2e] rounded-2xl p-8 border-4 border-[#c9b037] shadow-2xl">
+          <div className="mb-8">
+            <div className="text-center mb-4">
+              <div className="text-[#c9b037] text-sm uppercase tracking-wider mb-2">Dealer's Hand</div>
+              <div className="text-white text-3xl font-bold mb-1">
+                {gameState === 'betting' ? '--' : gameState === 'playing' ? '?' : dealerScore}
               </div>
-              <Button
-                onClick={startGame}
-                disabled={balance < bet}
-                className="w-full h-16 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white font-black text-xl disabled:opacity-50"
-              >
-                <Icon name="PlayCircle" className="mr-2" />
-                РАЗДАТЬ КАРТЫ
-              </Button>
+            </div>
+            <div className="flex justify-center gap-3 mb-8">
+              {dealerCards.map((card, idx) => (
+                <div key={idx}>
+                  {renderCard(card, gameState === 'playing' && idx === 1)}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="border-t-2 border-[#c9b037]/30 pt-8">
+            <div className="text-center mb-4">
+              <div className="text-[#c9b037] text-sm uppercase tracking-wider mb-2">Your Hand</div>
+              <div className="text-white text-3xl font-bold mb-1">
+                {gameState === 'betting' ? '--' : playerScore}
+              </div>
+            </div>
+            <div className="flex justify-center gap-3 mb-8">
+              {playerCards.map((card, idx) => (
+                <div key={idx}>
+                  {renderCard(card)}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {result && (
+            <div className="text-center mb-6">
+              <div className={`text-4xl font-black ${result.includes('WIN') ? 'text-[#c9b037]' : result.includes('PUSH') ? 'text-blue-400' : 'text-red-500'}`}>
+                {result}
+              </div>
             </div>
           )}
 
-          {gameState === 'playing' && (
-            <div className="grid grid-cols-2 gap-3">
-              <Button
-                onClick={hit}
-                className="h-16 bg-orange-600 hover:bg-orange-500 text-white font-black text-lg"
-              >
-                <Icon name="Plus" className="mr-2" />
-                ЕЩЁ КАРТУ
-              </Button>
-              <Button
-                onClick={stand}
-                className="h-16 bg-blue-600 hover:bg-blue-500 text-white font-black text-lg"
-              >
-                <Icon name="HandMetal" className="mr-2" />
-                ХВАТИТ
-              </Button>
-            </div>
-          )}
+          <div className="max-w-2xl mx-auto">
+            {gameState === 'betting' && (
+              <div className="space-y-4">
+                <div className="bg-[#1a1a1a] border border-[#2d5f3f] rounded-lg p-4">
+                  <div className="text-gray-400 text-sm mb-3">SELECT BET</div>
+                  <div className="grid grid-cols-5 gap-2">
+                    {betOptions.map(amount => (
+                      <button
+                        key={amount}
+                        onClick={() => setBet(amount)}
+                        className={`py-3 px-2 rounded-lg font-bold transition-all text-sm ${
+                          bet === amount
+                            ? 'bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-black scale-105'
+                            : 'bg-[#2a2a2a] text-white hover:bg-[#3a3a3a]'
+                        } border-2 ${bet === amount ? 'border-[#c9b037]' : 'border-[#2d5f3f]'}`}
+                      >
+                        {amount >= 1000000 ? `${amount/1000000}M` : `${amount/1000}K`}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <Button
+                  onClick={startGame}
+                  disabled={balance < bet}
+                  className="w-full h-16 bg-gradient-to-r from-[#FFD700] to-[#FFA500] hover:from-[#FFA500] hover:to-[#FFD700] text-black font-black text-xl disabled:opacity-50"
+                >
+                  DEAL CARDS ({bet.toLocaleString('ru-RU')} ₽)
+                </Button>
+              </div>
+            )}
 
-          {gameState === 'finished' && (
-            <Button
-              onClick={reset}
-              className="w-full h-16 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white font-black text-xl"
-            >
-              <Icon name="RotateCcw" className="mr-2" />
-              ЕЩЁ ПАРТИЮ
-            </Button>
-          )}
-        </Card>
+            {gameState === 'playing' && (
+              <div className="grid grid-cols-2 gap-4">
+                <Button
+                  onClick={hit}
+                  className="h-16 bg-[#2d5f3f] hover:bg-[#3a7550] text-white font-black text-lg border-2 border-[#c9b037]"
+                >
+                  HIT
+                </Button>
+                <Button
+                  onClick={stand}
+                  className="h-16 bg-gradient-to-r from-[#FFD700] to-[#FFA500] hover:from-[#FFA500] hover:to-[#FFD700] text-black font-black text-lg"
+                >
+                  STAND
+                </Button>
+              </div>
+            )}
+
+            {gameState === 'finished' && (
+              <Button
+                onClick={resetGame}
+                className="w-full h-16 bg-gradient-to-r from-[#FFD700] to-[#FFA500] hover:from-[#FFA500] hover:to-[#FFD700] text-black font-black text-xl"
+              >
+                NEW GAME
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
