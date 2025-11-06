@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import ClassicSlotMachine from '@/components/ClassicSlotMachine';
 import Sidebar from '@/components/Sidebar';
