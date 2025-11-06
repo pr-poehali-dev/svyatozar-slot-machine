@@ -82,27 +82,42 @@ const Dice = ({ balance, onBalanceChange }: DiceProps) => {
   return (
     <>
       {showResult && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-fade-in">
-          <div className="text-center px-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-xl animate-fade-in">
+          <div className="text-center px-4 relative">
+            {lastWin && (
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-10 left-10 text-6xl animate-ping">💥</div>
+                <div className="absolute top-10 right-10 text-6xl animate-ping" style={{animationDelay: '0.2s'}}>🎆</div>
+                <div className="absolute bottom-10 left-20 text-6xl animate-ping" style={{animationDelay: '0.4s'}}>✨</div>
+                <div className="absolute bottom-10 right-20 text-6xl animate-ping" style={{animationDelay: '0.6s'}}>🎇</div>
+              </div>
+            )}
             <div className="text-9xl mb-8 animate-bounce">
               {lastWin ? '🎲' : '💀'}
             </div>
             <h1 className={`text-5xl md:text-7xl font-black mb-6 leading-tight drop-shadow-2xl animate-pulse ${
               lastWin ? 'text-green-500' : 'text-red-500'
-            }`}>
-              {lastWin ? '🎉 НАХУЙ ВЫИГРАЛ! 🎉' : '💀 ПРОЕБАЛ, СУКА! 💀'}
+            }`} style={{textShadow: lastWin ? '0 0 40px rgba(0,255,0,0.8)' : '0 0 40px rgba(255,0,0,0.8)'}}>
+              {lastWin ? '💰 ЕБАТЬ, НАХУЙ ВЫИГРАЛ! 💰' : '💀 ПРОЕБАЛ ВСЁ, ЛОШАРА! 💀'}
             </h1>
             <div className="text-4xl md:text-6xl font-bold text-white mb-4">
               Выпало: <span className="text-yellow-400 font-black">{dice1 + dice2}</span>
             </div>
             {lastWin ? (
-              <p className="text-3xl md:text-5xl font-bold text-green-400 animate-pulse">
-                +{(lastWin / 1000000).toFixed(1)}M₽
-              </p>
+              <>
+                <p className="text-4xl md:text-6xl font-bold text-green-400 animate-pulse mb-4">
+                  +{(lastWin / 1000000).toFixed(1)}M₽
+                </p>
+                <div className="text-5xl">🎉🎊🎉🎊🎉</div>
+              </>
             ) : (
-              <p className="text-xl md:text-2xl text-white/70 font-semibold">
-                Проебал: {(bet / 1000000).toFixed(1)}M₽
-              </p>
+              <>
+                <p className="text-3xl md:text-5xl text-white/70 font-semibold mb-4">
+                  Минус {(bet / 1000000).toFixed(1)}M₽
+                </p>
+                <div className="text-5xl">🤣😂🤣😂🤣</div>
+                <div className="text-2xl mt-4 text-red-400">ИДИ РАБОТАТЬ!</div>
+              </>
             )}
           </div>
         </div>
@@ -238,6 +253,18 @@ const Dice = ({ balance, onBalanceChange }: DiceProps) => {
             </Button>
           </div>
         </Card>
+
+        {/* Провокационная реклама */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div className="bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg p-5 border-2 border-yellow-400 cursor-pointer hover:scale-105 transition-all">
+            <div className="text-white font-black text-xl">🔞 ГОРЯЧИЕ МОДЕЛИ ОНЛАЙН</div>
+            <div className="text-yellow-300 text-sm mt-2">Кликни пока никто не видит! 💋</div>
+          </div>
+          <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-lg p-5 border-2 border-yellow-400 cursor-pointer hover:scale-105 transition-all">
+            <div className="text-white font-black text-xl">💸 ЗАЙМ ЗА 5 МИНУТ</div>
+            <div className="text-yellow-300 text-sm mt-2">Без проверок! Одобрение 100%!</div>
+          </div>
+        </div>
       </div>
     </>
   );

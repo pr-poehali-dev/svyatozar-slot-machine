@@ -22,6 +22,9 @@ const Roulette = ({ balance, onBalanceChange }: RouletteProps) => {
   const [bets, setBets] = useState<Bet[]>([]);
   const [currentBetAmount, setCurrentBetAmount] = useState(100000);
   const [history, setHistory] = useState<number[]>([]);
+  const [showResultPopup, setShowResultPopup] = useState(false);
+  const [winAmount, setWinAmount] = useState(0);
+  const [particles, setParticles] = useState<Array<{id: number; x: number; y: number}>>([]);
 
   const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
   const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
@@ -139,12 +142,29 @@ const Roulette = ({ balance, onBalanceChange }: RouletteProps) => {
       }
     });
 
+    setWinAmount(totalWinAmount);
+    setShowResultPopup(true);
+
     if (totalWinAmount > 0) {
       playSound('win');
       onBalanceChange(balance + totalWinAmount);
+      
+      for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+          setParticles(prev => [...prev, {
+            id: Date.now() + Math.random(),
+            x: Math.random() * 100,
+            y: Math.random() * 100
+          }]);
+        }, i * 50);
+      }
+      
+      setTimeout(() => setParticles([]), 3000);
     } else {
       playSound('lose');
     }
+
+    setTimeout(() => setShowResultPopup(false), 4000);
   };
 
   const totalBetAmount = bets.reduce((sum, bet) => sum + bet.amount, 0);
@@ -155,8 +175,68 @@ const Roulette = ({ balance, onBalanceChange }: RouletteProps) => {
     5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
   ];
 
+  const loseMessages = [
+    '😂 ХА-ХА-ХА ПРОЕБАЛ СУКА!',
+    '💀 ЛОШАРА ЕБАНЫЙ!',
+    '🤡 ПИДОРАС НЕУДАЧНИК!',
+    '🖕 ИДИ НАХУЙ ЛУЗЕР!',
+    '😈 ОБОСРАЛСЯ ПОЛНОСТЬЮ!',
+    '🤮 ЧТО ЗА ХУЙНЯ БЛЯТЬ!',
+    '💩 ГОВНО А НЕ ИГРОК!'
+  ];
+
+  const winMessages = [
+    '🎉 ОХУЕТЬ! НИХУЯ СЕБЕ!',
+    '💰 БАБКИ! БАБКИ! БАБКИ!',
+    '🚀 НАХУЙ ВЫИГРАЛ СУКА!',
+    '🔥 ЕБАТЬ ТЫ КРАСАВЧИК!',
+    '⭐ ЗАЕБИСЬ! ПРОДОЛЖАЙ!',
+    '💎 ПИЗДАТЫЙ ВЫИГРЫШ БЛЯТЬ!'
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a4d2e] via-[#0d5c38] to-[#0a4d2e] p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#0a4d2e] via-[#0d5c38] to-[#0a4d2e] p-4 relative overflow-hidden">
+      {particles.map(particle => (
+        <div
+          key={particle.id}
+          className="absolute text-4xl animate-ping pointer-events-none"
+          style={{
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+            animation: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite'
+          }}
+        >
+          💰
+        </div>
+      ))}
+
+      {showResultPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-fade-in">
+          <div className="text-center px-4">
+            {winAmount > 0 ? (
+              <>
+                <div className="text-9xl mb-8 animate-bounce">🎉💰🎉</div>
+                <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight text-green-400 animate-pulse drop-shadow-2xl">
+                  {winMessages[Math.floor(Math.random() * winMessages.length)]}
+                </h1>
+                <div className="text-6xl md:text-8xl font-black text-[#FFD700] mb-4 animate-pulse">
+                  +{(winAmount / 1000000).toFixed(1)}M₽
+                </div>
+                <div className="text-3xl text-white/80">Выпало: <span className="text-[#FFD700] font-black">{result}</span></div>
+              </>
+            ) : (
+              <>
+                <div className="text-9xl mb-8 animate-bounce">💀🤡💀</div>
+                <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight text-red-500 animate-pulse drop-shadow-2xl">
+                  {loseMessages[Math.floor(Math.random() * loseMessages.length)]}
+                </h1>
+                <div className="text-4xl text-white/70 mb-4">Выпало: <span className="text-red-400 font-black">{result}</span></div>
+                <div className="text-2xl text-red-400 font-bold">Проебал: {(bets.reduce((sum, bet) => sum + bet.amount, 0) / 1000000).toFixed(1)}M₽</div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
       <div className="max-w-7xl mx-auto">
         
         <div className="bg-[#1a1a1a] border border-[#2d5f3f] rounded-lg p-6 mb-4 shadow-2xl">

@@ -13,6 +13,8 @@ const ClassicSlotMachine = ({ balance, onBalanceChange }: ClassicSlotMachineProp
   const [bet, setBet] = useState(100000);
   const [lastWin, setLastWin] = useState(0);
   const [spinCount, setSpinCount] = useState(0);
+  const [showLosePopup, setShowLosePopup] = useState(false);
+  const [particles, setParticles] = useState<Array<{id: number; x: number; y: number}>>([]);
 
   const symbols = ['💎', '⭐', '🍒', '🔔', '7️⃣', '🍋', '🍊', 'BAR'];
   const symbolValues: Record<string, number> = {
@@ -67,6 +69,17 @@ const ClassicSlotMachine = ({ balance, onBalanceChange }: ClassicSlotMachineProp
       playSound('win');
       setLastWin(winAmount);
       onBalanceChange(balance + winAmount);
+      
+      for (let i = 0; i < 40; i++) {
+        setTimeout(() => {
+          setParticles(prev => [...prev, {
+            id: Date.now() + Math.random(),
+            x: Math.random() * 100,
+            y: Math.random() * 100
+          }]);
+        }, i * 40);
+      }
+      setTimeout(() => setParticles([]), 3000);
     } else if (finalReels[0] === finalReels[1] || finalReels[1] === finalReels[2]) {
       const matchSymbol = finalReels[0] === finalReels[1] ? finalReels[0] : finalReels[1];
       const winAmount = bet * (symbolValues[matchSymbol] * 0.3);
@@ -75,11 +88,47 @@ const ClassicSlotMachine = ({ balance, onBalanceChange }: ClassicSlotMachineProp
       onBalanceChange(balance + winAmount);
     } else {
       playSound('lose');
+      setShowLosePopup(true);
+      setTimeout(() => setShowLosePopup(false), 3000);
     }
   };
 
+  const loseMessages = [
+    '😂 ЛОХ ЕБАНЫЙ!',
+    '💀 ПРОИГРАЛ СУКА!',
+    '🤡 ПИДОРАС НЕУДАЧНИК!',
+    '🖕 ХУЙНЯ А НЕ ВЫИГРЫШ!',
+    '😈 СЛИВАЙСЯ НАХУЙ!',
+    '🤮 ХА-ХА ПРОЕБАЛ!'
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a0a2e] via-[#240046] to-[#0f0525] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-[#1a0a2e] via-[#240046] to-[#0f0525] flex items-center justify-center p-4 relative overflow-hidden">
+      {particles.map(particle => (
+        <div
+          key={particle.id}
+          className="absolute text-4xl animate-ping pointer-events-none"
+          style={{
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+            animation: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite'
+          }}
+        >
+          💎
+        </div>
+      ))}
+
+      {showLosePopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-fade-in">
+          <div className="text-center px-4">
+            <div className="text-9xl mb-8 animate-bounce">💀🤡💀</div>
+            <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight text-red-500 animate-pulse drop-shadow-2xl">
+              {loseMessages[Math.floor(Math.random() * loseMessages.length)]}
+            </h1>
+            <div className="text-4xl text-red-400 font-bold">Проебал: {(bet / 1000000).toFixed(1)}M₽</div>
+          </div>
+        </div>
+      )}
       <div className="w-full max-w-4xl">
         <div className="bg-gradient-to-b from-[#2a1a4e] to-[#1a0a2e] rounded-3xl shadow-2xl border-4 border-[#FFD700] p-8">
           
