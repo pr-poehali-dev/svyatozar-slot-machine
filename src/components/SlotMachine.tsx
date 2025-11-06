@@ -15,6 +15,7 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
   const [bet, setBet] = useState(10);
   const [lastWin, setLastWin] = useState<number | null>(null);
   const [showJackpot, setShowJackpot] = useState(false);
+  const [showLose, setShowLose] = useState(false);
 
   const symbols = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -45,7 +46,11 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
       if (elapsed >= spinDuration) {
         clearInterval(interval);
         
-        const finalReels = [7, 7, 7];
+        const finalReels = [
+          symbols[Math.floor(Math.random() * symbols.length)],
+          symbols[Math.floor(Math.random() * symbols.length)],
+          symbols[Math.floor(Math.random() * symbols.length)]
+        ];
         
         setReels(finalReels);
         setSpinning(false);
@@ -74,7 +79,8 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
       onBalanceChange(balance + smallWin);
       toast.success(`Пара! Вы выиграли ${smallWin}₽!`);
     } else {
-      toast.error('Не повезло! Попробуйте еще раз');
+      setShowLose(true);
+      setTimeout(() => setShowLose(false), 5000);
     }
   };
 
@@ -98,6 +104,21 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
             </p>
             <p className="text-3xl sm:text-4xl md:text-6xl font-black text-secondary animate-pulse">
               +{lastWin}₽
+            </p>
+          </div>
+        </div>
+      )}
+      {showLose && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="text-center px-4 animate-jackpot">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-destructive mb-4 leading-tight">
+              💀 ЛОХ! 💀
+            </h1>
+            <p className="text-2xl sm:text-3xl md:text-5xl font-bold text-foreground mb-6 leading-snug">
+              ПРОЕБАЛ ДЕНЬГИ!
+            </p>
+            <p className="text-xl sm:text-2xl md:text-3xl text-muted-foreground">
+              Попробуй ещё раз, неудачник!
             </p>
           </div>
         </div>
