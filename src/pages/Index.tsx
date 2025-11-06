@@ -21,59 +21,56 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/10">
-      <nav className="border-b border-border/40 backdrop-blur-sm bg-background/80 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 md:py-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-3 md:gap-0">
-            <div className="flex items-center gap-2 md:gap-3">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center">
-                <span className="text-xl md:text-2xl">🎰</span>
-              </div>
-              <h1 className="text-2xl md:text-3xl font-black bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                СВЯТОЗАР
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-20"></div>
+      <nav className="border-b-2 border-orange-500/50 backdrop-blur-sm bg-slate-900/95 sticky top-0 z-50 shadow-xl">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="text-3xl md:text-4xl">🎰</div>
+              <h1 className="text-lg md:text-2xl font-black text-white tracking-tight">
+                СВЯТОЗАР СЛОТ<br className="md:hidden"/><span className="text-orange-500"> ЕБЁТ ВСЕХ В РОТ</span>
               </h1>
             </div>
-            <div className="flex items-center gap-2 md:gap-4">
-              <Card className="px-4 py-2 md:px-6 md:py-3 bg-card/80 backdrop-blur-sm border-primary/30">
+            <div className="flex items-center gap-2 md:gap-3">
+              <div className="px-3 py-2 md:px-5 md:py-2 bg-gradient-to-r from-green-600 to-green-700 rounded-lg border-2 border-green-400/50 shadow-lg">
                 <div className="flex items-center gap-2">
-                  <Icon name="Wallet" size={18} className="text-secondary md:w-5 md:h-5" />
-                  <span className="text-xl md:text-2xl font-bold text-foreground">
-                    {balance}₽
+                  <span className="text-xs md:text-sm text-green-100 font-medium">Баланс</span>
+                  <span className="text-base md:text-xl font-black text-white">
+                    {balance.toLocaleString()}₽
                   </span>
                 </div>
-              </Card>
+              </div>
               <Button
-                variant="outline"
-                size="sm"
                 onClick={addBalance}
-                className="border-secondary/50 hover:bg-secondary/10"
+                className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold px-3 md:px-5 py-2 border-2 border-orange-400/50 shadow-lg text-sm md:text-base"
               >
-                <Icon name="Plus" size={16} className="mr-1 md:mr-2" />
-                <span className="hidden sm:inline">Пополнить</span>
-                <span className="sm:hidden">+500₽</span>
+                Касса
               </Button>
             </div>
           </div>
         </div>
       </nav>
 
-      <main className="container mx-auto px-4 py-6 md:py-12">
-        <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
-          <div className="text-center space-y-2 md:space-y-4 animate-fade-in">
-            <h2 className="text-3xl md:text-5xl font-black text-foreground">
-              Онлайн Казино
-            </h2>
-            <p className="text-base md:text-xl text-muted-foreground">
-              Испытай удачу и сорви джекпот! 777 = x100
-            </p>
+      <main className="relative container mx-auto px-4 py-6 md:py-12">
+        <div className="max-w-6xl mx-auto space-y-6 md:space-y-8">
+          <div className="text-center space-y-3 md:space-y-5 animate-fade-in">
+            <div className="inline-block bg-gradient-to-r from-orange-500 via-red-600 to-orange-500 text-white px-6 md:px-12 py-3 md:py-5 rounded-2xl border-4 border-yellow-400/80 shadow-2xl transform hover:scale-105 transition-transform">
+              <h2 className="text-2xl md:text-4xl font-black uppercase tracking-wide">
+                🎰 ПРИВЕТСТВЕННЫЙ БОНУС 🎰
+              </h2>
+              <p className="text-xl md:text-3xl font-black mt-2">
+                150 000 ₽ + 150 ФРИСПИНОВ
+              </p>
+            </div>
           </div>
 
           <div className="flex justify-center gap-2 md:gap-4 animate-fade-in flex-wrap">
             <Dialog open={showRules} onOpenChange={setShowRules}>
               <DialogTrigger asChild>
-                <Button variant="outline" size="default" className="gap-2 md:text-base">
-                  <Icon name="BookOpen" size={18} className="md:w-5 md:h-5" />
-                  Правила игры
+                <Button className="gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold border-2 border-blue-400/50 shadow-lg">
+                  <Icon name="Medal" size={18} />
+                  Лобби
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
@@ -186,9 +183,9 @@ const Index = () => {
               </DialogContent>
             </Dialog>
 
-            <Button variant="outline" size="default" className="gap-2 md:text-base">
-              <Icon name="Sparkles" size={18} className="md:w-5 md:h-5" />
-              Турниры
+            <Button className="gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold border-2 border-purple-400/50 shadow-lg">
+              <Icon name="Gamepad2" size={18} />
+              Провайдеры
             </Button>
           </div>
 
@@ -196,47 +193,25 @@ const Index = () => {
             <ClassicSlotMachine balance={balance} onBalanceChange={setBalance} />
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4 md:gap-6 mt-8 md:mt-12">
-            <Card className="p-6 text-center space-y-3 bg-card/50 backdrop-blur-sm hover:scale-105 transition-transform">
-              <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
-                <Icon name="Zap" size={24} className="text-primary" />
-              </div>
-              <h3 className="text-xl font-bold">Быстрая игра</h3>
-              <p className="text-muted-foreground text-sm">
-                Моментальные результаты и выплаты
-              </p>
-            </Card>
-
-            <Card className="p-6 text-center space-y-3 bg-card/50 backdrop-blur-sm hover:scale-105 transition-transform">
-              <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mx-auto">
-                <Icon name="Trophy" size={24} className="text-secondary" />
-              </div>
-              <h3 className="text-xl font-bold">Большие выигрыши</h3>
-              <p className="text-muted-foreground text-sm">
-                Джекпот умножает ставку в 100 раз!
-              </p>
-            </Card>
-
-            <Card className="p-6 text-center space-y-3 bg-card/50 backdrop-blur-sm hover:scale-105 transition-transform">
-              <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mx-auto">
-                <Icon name="Shield" size={24} className="text-accent" />
-              </div>
-              <h3 className="text-xl font-bold">Честная игра</h3>
-              <p className="text-muted-foreground text-sm">
-                Прозрачная система генерации результатов
-              </p>
-            </Card>
+          <div className="mt-12 text-center">
+            <p className="text-white/70 text-sm md:text-base mb-4">Нас рекомендуют:</p>
+            <div className="flex flex-wrap justify-center gap-6 items-center opacity-50">
+              <div className="text-white font-bold text-lg">CASINO GURU AWARDS</div>
+              <div className="text-white font-bold text-lg">⚡ LCB</div>
+              <div className="text-white font-bold text-lg">💎 LatestCasino Bonuses</div>
+              <div className="text-white font-bold text-lg">🎯 GECOGRA</div>
+            </div>
           </div>
         </div>
       </main>
 
-      <footer className="border-t border-border/40 mt-20 py-8">
+      <footer className="relative border-t-2 border-orange-500/50 mt-20 py-8 bg-slate-900/80">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-muted-foreground">
-            © 2024 Святозар. Все права защищены.
+          <p className="text-white/80 font-bold">
+            © 2024 СВЯТОЗАР СЛОТ ЕБЁТ ВСЕХ В РОТ
           </p>
-          <p className="text-sm text-muted-foreground/60 mt-2">
-            Играйте ответственно. Только для развлечения.
+          <p className="text-sm text-white/50 mt-2">
+            Играйте ответственно. 18+
           </p>
         </div>
       </footer>

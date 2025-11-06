@@ -161,8 +161,8 @@ const ClassicSlotMachine = ({ balance, onBalanceChange }: ClassicSlotMachineProp
           <div className="absolute inset-0 bg-gradient-to-b from-yellow-400/20 to-transparent pointer-events-none"></div>
           
           <div className="relative bg-gradient-to-b from-yellow-600 to-yellow-700 py-4 border-b-4 border-yellow-800">
-            <h2 className="text-center text-2xl md:text-4xl font-black text-red-900 tracking-wider" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
-              СВЯТОЗАР
+            <h2 className="text-center text-xl md:text-3xl font-black text-red-900 tracking-wider leading-tight" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
+              СВЯТОЗАР СЛОТ<br/><span className="text-lg md:text-2xl">ЕБЁТ ВСЕХ В РОТ</span>
             </h2>
             <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-16 bg-red-600 rounded-full border-4 border-yellow-500 shadow-lg"></div>
           </div>
