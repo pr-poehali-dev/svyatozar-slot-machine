@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
-import SlotMachine from '@/components/SlotMachine';
+import ClassicSlotMachine from '@/components/ClassicSlotMachine';
 import {
   Dialog,
   DialogContent,
@@ -193,7 +193,7 @@ const Index = () => {
           </div>
 
           <div className="flex justify-center animate-fade-in">
-            <SlotMachine balance={balance} onBalanceChange={setBalance} />
+            <ClassicSlotMachine balance={balance} onBalanceChange={setBalance} />
           </div>
 
           <div className="grid md:grid-cols-3 gap-4 md:gap-6 mt-8 md:mt-12">
