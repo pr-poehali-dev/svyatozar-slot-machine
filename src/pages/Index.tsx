@@ -97,6 +97,14 @@ const Index = () => {
             <div className="max-w-6xl mx-auto">
               <Roulette balance={balance} onBalanceChange={setBalance} />
             </div>
+          ) : currentGame === 'blackjack' ? (
+            <div className="max-w-5xl mx-auto">
+              <Blackjack balance={balance} onBalanceChange={setBalance} />
+            </div>
+          ) : currentGame === 'dice' ? (
+            <div className="max-w-5xl mx-auto">
+              <Dice balance={balance} onBalanceChange={setBalance} />
+            </div>
           ) : (
             <div className="space-y-4">
               <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-green-600 via-green-500 to-green-600 h-40 md:h-52">
