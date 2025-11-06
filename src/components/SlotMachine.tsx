@@ -44,11 +44,7 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
       if (elapsed >= spinDuration) {
         clearInterval(interval);
         
-        const finalReels = [
-          symbols[Math.floor(Math.random() * symbols.length)],
-          symbols[Math.floor(Math.random() * symbols.length)],
-          symbols[Math.floor(Math.random() * symbols.length)]
-        ];
+        const finalReels = [7, 7, 7];
         
         setReels(finalReels);
         setSpinning(false);
@@ -63,9 +59,9 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
         const jackpotWin = bet * 100;
         setLastWin(jackpotWin);
         onBalanceChange(balance + jackpotWin);
-        toast.success('🎰 ДЖЕКПОТ! 777!', {
-          description: `Вы выиграли ${jackpotWin}₽!`,
-          duration: 5000
+        toast.success('🎰 СВЯТОЗАР И МАКСИМ - ПИЗДУЙТЕ РАБОТАТЬ НА УЛИЦУ!', {
+          description: `Джекпот ${jackpotWin}₽!`,
+          duration: 8000
         });
       } else {
         const normalWin = bet * 10;
