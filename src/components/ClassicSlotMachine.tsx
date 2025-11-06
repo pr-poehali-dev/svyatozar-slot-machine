@@ -8,7 +8,7 @@ interface ClassicSlotMachineProps {
 }
 
 const ClassicSlotMachine = ({ balance, onBalanceChange }: ClassicSlotMachineProps) => {
-  const [reels, setReels] = useState<string[]>(['🍒', '🍒', '🍒']);
+  const [reels, setReels] = useState<string[]>(['face', 'face', 'face']);
   const [spinning, setSpinning] = useState(false);
   const [bet, setBet] = useState(1000);
   const [lastWin, setLastWin] = useState<number | null>(null);
@@ -17,7 +17,8 @@ const ClassicSlotMachine = ({ balance, onBalanceChange }: ClassicSlotMachineProp
   const [loseMessage, setLoseMessage] = useState({ title: '', text: '', emoji: '' });
   const [lights, setLights] = useState<boolean[]>(Array(20).fill(false));
 
-  const symbols = ['🍒', '🍋', '🍊', '🍇', '⭐', '💎', '7️⃣'];
+  const symbols = ['face', '🍋', '🍊', '🍇', '⭐', '💎', '7️⃣'];
+  const faceUrl = 'https://cdn.poehali.dev/files/531d6c39-e90b-4aa4-b66e-12b444f697fd.jpg';
 
   const animateLights = () => {
     let interval: NodeJS.Timeout;
@@ -207,9 +208,17 @@ const ClassicSlotMachine = ({ balance, onBalanceChange }: ClassicSlotMachineProp
                       `}
                     >
                       <div className="absolute inset-0 bg-gradient-to-b from-white to-gray-100"></div>
-                      <span className="relative text-6xl md:text-7xl drop-shadow-lg">
-                        {symbol}
-                      </span>
+                      {symbol === 'face' ? (
+                        <img 
+                          src={faceUrl} 
+                          alt="Face" 
+                          className="relative w-full h-full object-cover rounded-lg"
+                        />
+                      ) : (
+                        <span className="relative text-6xl md:text-7xl drop-shadow-lg">
+                          {symbol}
+                        </span>
+                      )}
                     </div>
                   </div>
                 ))}
