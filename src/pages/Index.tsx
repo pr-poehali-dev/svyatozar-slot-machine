@@ -4,6 +4,8 @@ import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import ClassicSlotMachine from '@/components/ClassicSlotMachine';
 import Roulette from '@/components/Roulette';
+import Blackjack from '@/components/Blackjack';
+import Dice from '@/components/Dice';
 import Sidebar from '@/components/Sidebar';
 import GameCard from '@/components/GameCard';
 import {
@@ -26,8 +28,8 @@ const Index = () => {
   const games = [
     { id: 'roulette', title: 'Ебашит Рулетка', provider: 'Evolution Gaming', imageUrl: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/e2a9681f-18f6-41e1-8a68-cbfbd785ecbb.jpg', isLive: true },
     { id: 'roulette2', title: 'Хуяк Олимпус', provider: 'Pragmatic Play', imageUrl: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/f814daab-841f-425b-8b54-ff8c3d7cad82.jpg', isLive: true },
-    { id: 'starlight', title: 'Пиздатая Принцесса', provider: 'Pragmatic Play', imageUrl: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/fb615e4e-328d-45b7-80ad-615bf82496fa.jpg', isLive: false },
-    { id: 'sweet', title: 'Сладкий Пиздец', provider: 'Pragmatic Play', imageUrl: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/9a1780f8-7bb6-4b07-8992-0ebc07212e25.jpg', isLive: false },
+    { id: 'blackjack', title: 'Блядский Джек', provider: 'Evolution Gaming', imageUrl: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/25deaa11-a1ff-488a-9b68-1db0cb25f66e.jpg', isLive: true },
+    { id: 'dice', title: 'Кости Пиздец', provider: 'Pragmatic Play', imageUrl: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/7ce949fa-006f-438b-b232-b211ef4ac6aa.jpg', isLive: true },
     { id: 'wolf', title: 'Ебать Золото', provider: 'Pragmatic Play', imageUrl: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/e68b4ba2-b80d-4e75-8eb5-08b457039c5d.jpg', isLive: false },
     { id: 'book', title: 'Хуйня Фиеста', provider: 'Play\'n GO', imageUrl: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/45968cc9-544c-47f7-940e-a940ef3704c0.jpg', isLive: false },
     { id: 'razor', title: 'Дикий Пиздюк', provider: 'Push Gaming', imageUrl: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop', isLive: true },

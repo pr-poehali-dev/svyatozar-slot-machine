@@ -106,7 +106,7 @@ const Sidebar = ({ balance, onBalanceChange }: SidebarProps) => {
         </div>
       </div>
 
-      <Dialog open={showDeposit} onOpenChange={setShowDeposit}>
+      <Dialog open={showDeposit} onOpenChange={(open) => { setShowDeposit(open); if (!open) { setSelectedBank(null); setShowBankTransfer(false); } }}>
         <DialogContent className="bg-[#0f1419] text-white border border-gray-700">
           <DialogHeader>
             <DialogTitle className="text-2xl font-black flex items-center gap-2">
@@ -114,47 +114,111 @@ const Sidebar = ({ balance, onBalanceChange }: SidebarProps) => {
               Пополнение счёта
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm text-white/70 mb-2 block">Номер карты</label>
-              <input
-                type="text"
-                placeholder="0000 0000 0000 0000"
-                value={cardNumber}
-                onChange={(e) => setCardNumber(e.target.value)}
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white font-mono text-lg focus:outline-none focus:border-orange-500"
-                maxLength={19}
-              />
+          {!showBankTransfer ? (
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm text-gray-400 mb-3 block font-semibold">Выберите банк:</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { id: 'sberbank', name: 'Сбербанк', icon: '🟢', color: 'green' },
+                    { id: 'tinkoff', name: 'Тинькофф', icon: '🟡', color: 'yellow' },
+                    { id: 'alfabank', name: 'Альфа', icon: '🔴', color: 'red' },
+                    { id: 'vtb', name: 'ВТБ', icon: '🔵', color: 'blue' },
+                  ].map(bank => (
+                    <button
+                      key={bank.id}
+                      onClick={() => setSelectedBank(bank.id)}
+                      className={`p-3 rounded-lg border-2 transition-all ${
+                        selectedBank === bank.id 
+                          ? `border-${bank.color}-500 bg-${bank.color}-500/10` 
+                          : 'border-gray-700 bg-gray-900 hover:border-gray-600'
+                      }`}
+                    >
+                      <div className="text-2xl mb-1">{bank.icon}</div>
+                      <div className="text-white font-bold text-xs">{bank.name}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm text-gray-400 mb-2 block">Сумма пополнения</label>
+                <input
+                  type="number"
+                  placeholder="Введите сумму"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white text-xl font-bold focus:outline-none focus:border-orange-500"
+                />
+              </div>
+              
+              <div className="grid grid-cols-3 gap-2">
+                {quickAmounts.slice(0, 6).map((amt) => (
+                  <Button
+                    key={amt}
+                    onClick={() => setAmount(amt.toString())}
+                    className="bg-gray-800 hover:bg-gray-700 border-0 text-xs"
+                  >
+                    {amt >= 1000000 ? `${(amt / 1000000).toFixed(0)}M` : `${(amt / 1000).toFixed(0)}K`}₽
+                  </Button>
+                ))}
+              </div>
+
+              <Button
+                onClick={handleDeposit}
+                disabled={!amount || !selectedBank}
+                className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-black py-4 text-base rounded-lg disabled:opacity-50"
+              >
+                Перейти к оплате
+              </Button>
             </div>
-            <div>
-              <label className="text-sm text-white/70 mb-2 block">Сумма пополнения</label>
-              <input
-                type="number"
-                placeholder="0"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white text-xl font-bold focus:outline-none focus:border-blue-500"
-              />
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              {quickAmounts.slice(0, 6).map((amt) => (
+          ) : (
+            <div className="space-y-4">
+              <div className={`p-5 rounded-lg ${
+                selectedBank === 'sberbank' ? 'bg-green-600' :
+                selectedBank === 'tinkoff' ? 'bg-yellow-500' :
+                selectedBank === 'alfabank' ? 'bg-red-600' :
+                'bg-blue-600'
+              }`}>
+                <div className="text-white">
+                  <div className="text-2xl mb-3 font-black">
+                    {selectedBank === 'sberbank' && '🟢 СБЕРБАНК ОНЛАЙН'}
+                    {selectedBank === 'tinkoff' && '🟡 ТИНЬКОФФ'}
+                    {selectedBank === 'alfabank' && '🔴 АЛЬФА-БАНК'}
+                    {selectedBank === 'vtb' && '🔵 ВТБ ОНЛАЙН'}
+                  </div>
+                  <div className="text-xs mb-2 opacity-90">К оплате:</div>
+                  <div className="text-3xl font-black mb-3">{parseInt(amount).toLocaleString()} ₽</div>
+                  <div className="text-xs opacity-75">Вы будете перенаправлены в банк</div>
+                </div>
+              </div>
+
+              <div className="bg-gray-900 p-4 rounded-lg space-y-2">
+                <div className="text-gray-400 text-xs">Реквизиты:</div>
+                <div className="text-white font-mono text-xs">
+                  Карта: •••• {Math.floor(Math.random() * 9000 + 1000)}
+                </div>
+                <div className="text-white text-xs">
+                  Получатель: СВЯТОЗАР СЛОТ
+                </div>
+              </div>
+
+              <div className="flex gap-2">
                 <Button
-                  key={amt}
-                  onClick={() => setAmount(amt.toString())}
-                  className="bg-gray-800 hover:bg-gray-700 border-0 text-sm"
+                  onClick={() => { setShowBankTransfer(false); setSelectedBank(null); }}
+                  className="flex-1 bg-gray-700 hover:bg-gray-600 text-white text-sm"
                 >
-                  {amt >= 1000000 ? `${(amt / 1000000).toFixed(0)}M` : `${(amt / 1000).toFixed(0)}K`}₽
+                  Назад
                 </Button>
-              ))}
+                <Button
+                  onClick={completeBankTransfer}
+                  className="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold text-sm"
+                >
+                  Оплачено ✓
+                </Button>
+              </div>
             </div>
-            <Button
-              onClick={handleDeposit}
-              disabled={!amount || !cardNumber}
-              className="w-full bg-orange-600 hover:bg-orange-500 text-white font-bold py-4 text-base rounded-lg disabled:opacity-50"
-            >
-              Пополнить счёт
-            </Button>
-          </div>
+          )}
         </DialogContent>
       </Dialog>
 
