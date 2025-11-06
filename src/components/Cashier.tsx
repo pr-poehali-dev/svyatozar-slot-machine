@@ -17,12 +17,12 @@ const Cashier = ({ balance, onBalanceChange, onClose }: CashierProps) => {
   const [showPayment, setShowPayment] = useState(false);
 
   const paymentMethods = [
-    { id: 'sber', name: 'Сбербанк', icon: '🟢', color: 'from-green-600 to-green-700' },
-    { id: 'tinkoff', name: 'Тинькофф', icon: '💛', color: 'from-yellow-500 to-yellow-600' },
-    { id: 'alfa', name: 'Альфа-Банк', icon: '🔴', color: 'from-red-600 to-red-700' },
-    { id: 'vtb', name: 'ВТБ', icon: '🔵', color: 'from-blue-600 to-blue-700' },
-    { id: 'qiwi', name: 'QIWI', icon: '🟠', color: 'from-orange-500 to-orange-600' },
-    { id: 'yoomoney', name: 'ЮMoney', icon: '🟣', color: 'from-purple-600 to-purple-700' },
+    { id: 'sber', name: 'Сбербанк Онлайн', icon: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/sber-logo.svg', color: 'bg-[#21A038]' },
+    { id: 'tinkoff', name: 'Тинькофф', icon: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/tinkoff-logo.svg', color: 'bg-[#FFDD2D]' },
+    { id: 'alfa', name: 'Альфа-Банк', icon: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/alfa-logo.svg', color: 'bg-[#EF3124]' },
+    { id: 'vtb', name: 'ВТБ', icon: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/vtb-logo.svg', color: 'bg-[#0078D2]' },
+    { id: 'qiwi', name: 'QIWI Кошелёк', icon: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/qiwi-logo.svg', color: 'bg-[#FF8C00]' },
+    { id: 'yoomoney', name: 'ЮMoney', icon: 'https://cdn.poehali.dev/projects/649f2b7d-9a90-4f73-be76-293c3e9ba945/files/yoomoney-logo.svg', color: 'bg-[#8B3FFD]' },
   ];
 
   const quickAmounts = [100000, 500000, 1000000, 5000000, 10000000, 50000000];
@@ -55,37 +55,122 @@ const Cashier = ({ balance, onBalanceChange, onClose }: CashierProps) => {
 
   return (
     <>
-      {showPayment && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white p-4">
-          <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 border border-gray-200">
-            <div className="flex items-center justify-between mb-6 pb-4 border-b">
+      {showPayment && selectedMethod === 'sber' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#F5F5F5] p-4">
+          <div className="w-full max-w-lg bg-white shadow-xl">
+            <div className="bg-[#21A038] px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="text-4xl">{paymentMethods.find(m => m.id === selectedMethod)?.icon}</div>
-                <div>
-                  <div className="text-xl font-bold text-gray-900">{paymentMethods.find(m => m.id === selectedMethod)?.name}</div>
-                  <div className="text-sm text-gray-500">Онлайн-банк</div>
-                </div>
+                <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="12" r="10"/>
+                </svg>
+                <div className="text-white text-xl font-medium">СберБанк Онлайн</div>
               </div>
+              <div className="text-white text-sm">09:47</div>
             </div>
             
-            <div className="space-y-4 mb-6">
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <div className="text-xs text-gray-500 mb-1">Сумма операции</div>
-                <div className="text-3xl font-bold text-gray-900">{(parseInt(amount) / 1000000).toFixed(1)}M ₽</div>
+            <div className="p-6 space-y-6">
+              <div>
+                <div className="text-[#9E9E9E] text-sm mb-2">Перевод</div>
+                <div className="text-[#333333] text-3xl font-medium">{(parseInt(amount) / 1000000).toFixed(2)} ₽</div>
               </div>
               
-              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                <div className="flex items-center gap-2 mb-2">
-                  <Icon name="Shield" size={16} className="text-blue-600" />
-                  <div className="text-xs font-semibold text-blue-900">Безопасная транзакция</div>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between py-3 border-b border-gray-200">
+                  <span className="text-[#757575] text-sm">Откуда</span>
+                  <span className="text-[#333333] text-sm font-medium">•• 4276</span>
                 </div>
-                <div className="text-xs text-blue-700">Данные защищены по стандарту PCI DSS</div>
+                <div className="flex items-center justify-between py-3 border-b border-gray-200">
+                  <span className="text-[#757575] text-sm">Куда</span>
+                  <span className="text-[#333333] text-sm font-medium">СВЯТОЗАР</span>
+                </div>
+                <div className="flex items-center justify-between py-3 border-b border-gray-200">
+                  <span className="text-[#757575] text-sm">Комиссия</span>
+                  <span className="text-[#333333] text-sm font-medium">0 ₽</span>
+                </div>
+              </div>
+              
+              <div className="bg-[#F5F5F5] rounded-lg p-4 flex items-start gap-3">
+                <svg className="w-5 h-5 text-[#21A038] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <div>
+                  <div className="text-[#333333] text-sm font-medium mb-1">Безопасная оплата</div>
+                  <div className="text-[#757575] text-xs leading-relaxed">Ваши данные защищены технологией 3-D Secure</div>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-center gap-2 py-4">
+                <div className="w-2 h-2 bg-[#21A038] rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-[#21A038] rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-2 h-2 bg-[#21A038] rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showPayment && selectedMethod === 'tinkoff' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#F6F7F8] p-4">
+          <div className="w-full max-w-lg bg-white shadow-xl">
+            <div className="bg-[#FFDD2D] px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-black rounded-full"></div>
+                <div className="text-black text-xl font-bold">Тинькофф</div>
               </div>
             </div>
             
-            <div className="flex items-center justify-center gap-2 text-gray-500">
-              <Icon name="Loader2" size={20} className="animate-spin" />
-              <span className="text-sm font-medium">Обработка платежа...</span>
+            <div className="p-6 space-y-6">
+              <div>
+                <div className="text-[#9299A2] text-sm mb-2">Оплата</div>
+                <div className="text-[#333333] text-3xl font-bold">{(parseInt(amount) / 1000000).toFixed(2)} ₽</div>
+              </div>
+              
+              <div className="bg-[#F6F7F8] rounded-2xl p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[#9299A2] text-sm">Карта</span>
+                  <span className="text-[#333333] text-sm font-medium">•• 5536</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[#9299A2] text-sm">Получатель</span>
+                  <span className="text-[#333333] text-sm font-medium">СВЯТОЗАР</span>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-center gap-2 py-4">
+                <div className="w-2 h-2 bg-[#FFDD2D] rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-[#FFDD2D] rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-2 h-2 bg-[#FFDD2D] rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showPayment && !['sber', 'tinkoff'].includes(selectedMethod || '') && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white p-4">
+          <div className="w-full max-w-md bg-white rounded-xl shadow-2xl p-8 border border-gray-100">
+            <div className="flex items-center justify-center mb-6">
+              <div className={`w-16 h-16 ${paymentMethods.find(m => m.id === selectedMethod)?.color} rounded-2xl flex items-center justify-center`}>
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+              </div>
+            </div>
+            
+            <div className="text-center mb-6">
+              <div className="text-[#333333] text-xl font-semibold mb-1">{paymentMethods.find(m => m.id === selectedMethod)?.name}</div>
+              <div className="text-[#9E9E9E] text-sm">Подтверждение операции</div>
+            </div>
+            
+            <div className="bg-[#F5F5F5] rounded-xl p-5 mb-6">
+              <div className="text-[#757575] text-xs mb-1">Сумма</div>
+              <div className="text-[#333333] text-3xl font-semibold">{(parseInt(amount) / 1000000).toFixed(2)} ₽</div>
+            </div>
+            
+            <div className="flex items-center justify-center gap-2 text-[#757575]">
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
             </div>
           </div>
         </div>
@@ -166,12 +251,14 @@ const Cashier = ({ balance, onBalanceChange, onClose }: CashierProps) => {
                   <button
                     key={method.id}
                     onClick={() => setSelectedMethod(method.id)}
-                    className={`p-4 rounded-lg bg-gradient-to-r ${method.color} hover:opacity-90 transition-all ${
-                      selectedMethod === method.id ? 'ring-4 ring-yellow-400 scale-105' : ''
+                    className={`p-5 rounded-xl bg-white border-2 hover:shadow-lg transition-all ${
+                      selectedMethod === method.id ? 'border-green-500 shadow-lg' : 'border-gray-700'
                     }`}
                   >
-                    <div className="text-4xl mb-2">{method.icon}</div>
-                    <div className="text-white font-bold text-sm">{method.name}</div>
+                    <div className={`${method.color} w-12 h-12 rounded-lg mx-auto mb-3 flex items-center justify-center`}>
+                      <div className="w-8 h-8 bg-white/90 rounded"></div>
+                    </div>
+                    <div className="text-white font-semibold text-sm">{method.name}</div>
                   </button>
                 ))}
               </div>
