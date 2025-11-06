@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/dialog";
 
 const Index = () => {
-  const [balance, setBalance] = useState(1000);
+  const [balance, setBalance] = useState(10000000);
   const [showRules, setShowRules] = useState(false);
 
   const addBalance = () => {
-    setBalance(balance + 500);
+    setBalance(balance + 5000000);
   };
 
   return (

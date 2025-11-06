@@ -16,6 +16,7 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
   const [lastWin, setLastWin] = useState<number | null>(null);
   const [showJackpot, setShowJackpot] = useState(false);
   const [showLose, setShowLose] = useState(false);
+  const [loseMessage, setLoseMessage] = useState({ title: '', text: '', emoji: '' });
 
   const symbols = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -62,23 +63,24 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
   const checkWin = (finalReels: number[]) => {
     if (finalReels[0] === finalReels[1] && finalReels[1] === finalReels[2]) {
       if (finalReels[0] === 7) {
-        const jackpotWin = bet * 100;
+        const jackpotWin = bet * 10000;
         setLastWin(jackpotWin);
         onBalanceChange(balance + jackpotWin);
         setShowJackpot(true);
         setTimeout(() => setShowJackpot(false), 8000);
       } else {
-        const normalWin = bet * 10;
+        const normalWin = bet * 1000;
         setLastWin(normalWin);
         onBalanceChange(balance + normalWin);
         toast.success(`Три ${finalReels[0]}! Вы выиграли ${normalWin}₽!`);
       }
     } else if (finalReels[0] === finalReels[1] || finalReels[1] === finalReels[2] || finalReels[0] === finalReels[2]) {
-      const smallWin = bet * 2;
+      const smallWin = bet * 100;
       setLastWin(smallWin);
       onBalanceChange(balance + smallWin);
       toast.success(`Пара! Вы выиграли ${smallWin}₽!`);
     } else {
+      setLoseMessage(getRandomLoseMessage());
       setShowLose(true);
       setTimeout(() => setShowLose(false), 5000);
     }
@@ -86,9 +88,25 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
 
   const changeBet = (amount: number) => {
     const newBet = bet + amount;
-    if (newBet >= 10 && newBet <= 1000) {
+    if (newBet >= 10 && newBet <= 10000000) {
       setBet(newBet);
     }
+  };
+
+  const getRandomLoseMessage = () => {
+    const messages = [
+      { title: '💩 ЛОХ! 💩', text: 'ПРОЕБАЛ ДЕНЬГИ!', emoji: '😂' },
+      { title: '🤡 ДЕБИЛ! 🤡', text: 'СЛИЛ ВСЁ НАХУЙ!', emoji: '👎' },
+      { title: '💀 ОТСОСАЛ! 💀', text: 'ИДИ НАХУЙ ОТСЮДА!', emoji: '🖕' },
+      { title: '🤮 ЧМО! 🤮', text: 'ЗАсрал ВСЁ НА ХУЙ!', emoji: '😤' },
+      { title: '😈 ПИЗДЕЦ! 😈', text: 'ТЫ ТУПОЙ КАК ПРОБКА!', emoji: '🤬' },
+      { title: '👺 ДАУН! 👺', text: 'СЛИВАЙ ДАЛЬШЕ, УЕБАН!', emoji: '👊' },
+      { title: '💩 ГОВНО! 💩', text: 'ПОШЁЛ НАХУЙ, ЛОХ!', emoji: '👎' },
+      { title: '🤯 ХУЙНЯ! 🤯', text: 'ТЫ ПРОСРАЛ ВСЁ!', emoji: '😭' },
+      { title: '👎 НУБ! 👎', text: 'УЧИСЬ ИГРАТЬ, ОТСОС!', emoji: '😡' },
+      { title: '🔥 ПИЗДА! 🔥', text: 'ВСЁ ПРОСРАЛ НАХУЙ!', emoji: '😬' }
+    ];
+    return messages[Math.floor(Math.random() * messages.length)];
   };
 
   return (
@@ -112,13 +130,13 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
           <div className="text-center px-4 animate-jackpot">
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-destructive mb-4 leading-tight">
-              💀 ЛОХ! 💀
+              {loseMessage.title}
             </h1>
             <p className="text-2xl sm:text-3xl md:text-5xl font-bold text-foreground mb-6 leading-snug">
-              ПРОЕБАЛ ДЕНЬГИ!
+              {loseMessage.text}
             </p>
-            <p className="text-xl sm:text-2xl md:text-3xl text-muted-foreground">
-              Попробуй ещё раз, неудачник!
+            <p className="text-6xl sm:text-7xl md:text-9xl animate-pulse">
+              {loseMessage.emoji}
             </p>
           </div>
         </div>
@@ -165,7 +183,7 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => changeBet(-10)}
+                onClick={() => changeBet(-1000)}
                 disabled={spinning || bet <= 10}
                 className="h-8 w-8 md:h-9 md:w-9 p-0"
               >
@@ -177,8 +195,8 @@ const SlotMachine = ({ balance, onBalanceChange }: SlotMachineProps) => {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => changeBet(10)}
-                disabled={spinning || bet >= 1000}
+                onClick={() => changeBet(1000)}
+                disabled={spinning || bet >= 10000000}
                 className="h-8 w-8 md:h-9 md:w-9 p-0"
               >
                 <Icon name="Plus" size={14} className="md:w-4 md:h-4" />
